@@ -17,6 +17,30 @@ nlu:
       - goodevening
       - good afternoon
 
+  - intent: set_goal
+    examples: |
+      - i want to [drink more water](goal)
+      - i want to [stop procrasinating](goal)
+      - i want to [eat less junk food](goal)
+      - i want to [get better at math](goal)
+      - i want to [make more money](goal)
+      - i need to [build my confidence](goal)
+      - i need to [build my confidence](goal)
+      - i need to [get a girlfriend](goal)
+      - i need to [become happier](goal)
+      - i need to [love my wife](goal)
+      - [building confidence](goal) is my goal
+      - [talking to my kids](goal) is my goal
+      - [giving more gifts](goal) is my goal
+      - [meeting new people](goal) is my goal
+      - [eating less junk food](goal) is my goal
+      - my goal is to [travel more](goal)
+      - my goal is to [read](goal)
+      - my goal is to [get new hobbies](goal)
+      - my goal is to [satisfy my customers](goal)
+      - my goal is [get better at fighting](goal)
+      - man, i need to [lose some weight](goal)
+
   - intent: goodbye
     examples: |
       - good afternoon

@@ -8,14 +8,19 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
+  - set_goal
+
+entities:
+  - goal
+
+slots:
+  goal:
+    type: text
+    influence_conversation: false
 
 responses:
   utter_greet:
     - text: "Hey! How are you?"
-
-  utter_cheer_up:
-    - text: "Here is something to cheer you up:"
-      image: "https://i.imgur.com/nGF1K8f.jpg"
 
   utter_did_that_help:
     - text: "Did that help you?"
@@ -26,8 +31,20 @@ responses:
   utter_goodbye:
     - text: "Bye"
 
-  utter_iamabot:
-    - text: "I am a bot, powered by Rasa."
+  utter_confirm_goal:
+    - text: "Okay. So your goal is: {goal}?"
+    - text: "Lemme confirm. This is your goal: {goal}?"
+    - text: "'{goal}' is your goal, right?"
+
+  utter_ask_if_make_goal:
+    - text: "Hey, do you want to make that a goal?"
+    - text: "Wanna make that a goal?"
+    - text: "Sounds like a good goal? Want to make it one?"
+
+  utter_goal_set:
+    - text: "Great, saving your goal now!"
+    - text: "Lets add it as a goal"
+    - text: "Alright! Adding this goal..."
 
 session_config:
   session_expiration_time: 60

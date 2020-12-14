@@ -8,22 +8,11 @@ stories:
       - intent: mood_great
       - action: utter_happy
 
-  - story: sad path 1
+  - story: setting goal happy 1
     steps:
-      - intent: greet
-      - action: utter_greet
-      - intent: mood_unhappy
-      - action: utter_cheer_up
-      - action: utter_did_that_help
+      - intent: set_goal
+      - action: utter_ask_if_make_goal
       - intent: affirm
-      - action: utter_happy
-
-  - story: sad path 2
-    steps:
-      - intent: greet
-      - action: utter_greet
-      - intent: mood_unhappy
-      - action: utter_cheer_up
-      - action: utter_did_that_help
-      - intent: deny
-      - action: utter_goodbye
+      - action: utter_confirm_goal
+      - intent: affirm
+      - action: utter_goal_set
