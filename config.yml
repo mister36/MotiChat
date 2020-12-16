@@ -16,6 +16,14 @@ pipeline:
   - name: EntitySynonymMapper
   - name: ResponseSelector
     epochs: 100
+  - name: "DucklingEntityExtractor"
+    # url of the running duckling server
+    url: "http://localhost:8000"
+    # dimensions to extract
+    dimensions: ["time"]
+    # Timeout for receiving response from http url of the running duckling server
+    # if not set the default timeout of duckling http url is set to 3 seconds.
+    timeout: 3
 
 # Configuration for Rasa Core.
 # https://rasa.com/docs/rasa/core/policies/

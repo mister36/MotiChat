@@ -1,18 +1,34 @@
 version: "2.0"
 
 stories:
-  - story: happy path
+  - story: bot challenge happy 1
+    steps:
+      - intent: bot_challenge
+      - action: utter_iam_bot
+
+  - story: greet happy 1
     steps:
       - intent: greet
       - action: utter_greet
-      - intent: mood_great
-      - action: utter_happy
 
-  - story: setting goal happy 1
+  - story: creating a task/habit/mission happy 1
     steps:
-      - intent: set_goal
-      - action: utter_ask_if_make_goal
+      - intent: future
+      - action: utter_ask_make_goal
       - intent: affirm
-      - action: utter_confirm_goal
-      - intent: affirm
-      - action: utter_goal_set
+      - action: create_goal_form
+      - active_loop: create_goal_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: utter_goal_created
+
+  - story: asking for motivational quote
+    steps:
+      - intent: motivational_quote
+      - action: action_grab_quote
+
+  # - story: bot asks for tasks & user says time
+  #   steps:
+  #     - intent: say_task
+  #     - action: action_set_task

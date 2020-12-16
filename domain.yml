@@ -8,15 +8,38 @@ intents:
   - mood_great
   - mood_unhappy
   - bot_challenge
-  - set_goal
+  - motivational_quote
+  # - inform
+  - future
 
 entities:
   - goal
+  - time
+
+forms:
+  create_goal_form:
+    goal:
+      - type: from_entity
+        entity: goal
+    # goal_type:
+    #   - type: from_entity
+    #     entity: goal_type
+    time:
+      - type: from_entity
+        entity: time
 
 slots:
   goal:
     type: text
     influence_conversation: false
+  goal_type:
+    type: categorical
+    values:
+      - task
+      - habit
+      - mission
+  time:
+    type: any
 
 responses:
   utter_greet:
@@ -31,20 +54,30 @@ responses:
   utter_goodbye:
     - text: "Bye"
 
-  utter_confirm_goal:
-    - text: "Okay. So your goal is: {goal}?"
-    - text: "Lemme confirm. This is your goal: {goal}?"
-    - text: "'{goal}' is your goal, right?"
+  utter_iam_bot:
+    - text: "I am your motivational assistant, Moti"
+    - text: "I was developed using artificial intelligence to motivate the human race"
+    - text: "I'm not human. I am made from zeros and ones"
 
-  utter_ask_if_make_goal:
-    - text: "Hey, do you want to make that a goal?"
-    - text: "Wanna make that a goal?"
-    - text: "Sounds like a good goal? Want to make it one?"
+  # Goals
+  utter_ask_make_goal:
+    - text: "Wanna make this a goal?"
+    - text: "Goal time?"
+    - text: "How about we make this a goal?"
 
-  utter_goal_set:
-    - text: "Great, saving your goal now!"
-    - text: "Lets add it as a goal"
-    - text: "Alright! Adding this goal..."
+  utter_ask_create_goal_form_time:
+    - text: "That's great! What time will you do that by?"
+
+  utter_ask_create_goal_form_goal:
+    - text: "Nice, say your goal in simple words"
+    - text: "Alright, tell me the goal you want to make"
+
+  utter_goal_created:
+    - text: '"{goal}" at {time} added to your MotiGoals'
+actions:
+  - action_grab_quote
+  - action_which_goal_complete
+  - action_set_task
 
 session_config:
   session_expiration_time: 60

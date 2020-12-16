@@ -1,6 +1,9 @@
 version: "2.0"
 
 nlu:
+  # - regex: one_or_two_digit_number
+  #   examples: |
+  #     - ^\d{1,2}$
   - intent: greet
     examples: |
       - hey
@@ -16,30 +19,55 @@ nlu:
       - goodmorning
       - goodevening
       - good afternoon
+      - hey what's up
 
-  - intent: set_goal
+  - intent: future
     examples: |
-      - i want to [drink more water](goal)
+      - [workout at the gym](goal) at 2:25
+      - i'm gonna [workout at the gym]{"entity": "goal", "role": "task"} at 2
+      - i plan to [go for a run](goal){"entity": "goal", "role": "task"} at 4:20
+      - [take a test](goal){"entity": "goal", "role": "task"} today at 1:20
+      - i'll [ask patricia out](goal){"entity": "goal", "role": "task"} at 1:34
+      - [run 5 laps]{"entity": "goal", "role": "task"} at 3
+      - [run 5 laps]{"entity": "goal", "role": "habit"} every day
+      - i'm gonna [go to sleep]{"entity": "goal", "role": "task"} at 9:30
+      - i will [go to work]{"entity": "goal", "role": "task"} at 3
+      - i will [go to work]{"entity": "goal", "role": "habit"} every monday
+      - at 3 i will [go to work]{"entity": "goal", "role": "task"}
       - i want to [stop procrasinating](goal)
-      - i want to [eat less junk food](goal)
-      - i want to [get better at math](goal)
-      - i want to [make more money](goal)
-      - i need to [build my confidence](goal)
-      - i need to [build my confidence](goal)
-      - i need to [get a girlfriend](goal)
-      - i need to [become happier](goal)
-      - i need to [love my wife](goal)
-      - [building confidence](goal) is my goal
-      - [talking to my kids](goal) is my goal
-      - [giving more gifts](goal) is my goal
-      - [meeting new people](goal) is my goal
-      - [eating less junk food](goal) is my goal
-      - my goal is to [travel more](goal)
-      - my goal is to [read](goal)
-      - my goal is to [get new hobbies](goal)
-      - my goal is to [satisfy my customers](goal)
       - my goal is [get better at fighting](goal)
-      - man, i need to [lose some weight](goal)
+      - my mission is to [become a better boxer]{"entity": "goal", "role": "mission"}
+      - [losing 10 pounds]{"entity": "goal", "role": "mission"} is my mission
+      - my new habit is to [jog 10 laps]{"entity": "goal", "role": "habit"}
+      - [eating healthy]{"entity": "goal", "role": "habit"} is my new habit
+      - my new task is to [read a book]{"entity": "goal", "role": "task"}
+      - my new task is to [make a picture]{"entity": "goal", "role": "task"} at 4
+      - I really want to [get faster at the 100m](goal)
+
+  # - intent: inform
+  #   examples: |
+  #     - 3pm
+  #     - 3:00
+  #     - i think at 2am
+  #     - 2pm
+  #     - 2:00pm
+  #     - 1:45
+
+  - intent: motivational_quote
+    examples: |
+      - motivational quote
+      - motivatioin quote
+      - moavational quoote
+      - motivation quote
+      - give me a motivational quote
+      - i want a motivational quote
+      - motivation quote please
+      - hey, i want a motivational quote
+      - give me a quote dog
+      - gimme quote  
+      - wanna quoote
+      - wanna quote
+      - quote
 
   - intent: goodbye
     examples: |
@@ -63,6 +91,10 @@ nlu:
       - of course
       - that sounds good
       - correct
+      - sure 
+      - yep 
+      - lets do it  
+      - okay
 
   - intent: deny
     examples: |
@@ -114,3 +146,6 @@ nlu:
       - are you a human?
       - am I talking to a bot?
       - am I talking to a human?
+      - what are you?
+      - are you real?
+      - are you an actual person?
