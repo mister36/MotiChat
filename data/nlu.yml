@@ -1,9 +1,6 @@
 version: "2.0"
 
 nlu:
-  # - regex: one_or_two_digit_number
-  #   examples: |
-  #     - ^\d{1,2}$
   - intent: greet
     examples: |
       - hey
@@ -20,14 +17,15 @@ nlu:
       - goodevening
       - good afternoon
       - hey what's up
+      - hola
 
   - intent: future
     examples: |
       - [workout at the gym](goal) at 2:25
       - i'm gonna [workout at the gym]{"entity": "goal", "role": "task"} at 2
-      - i plan to [go for a run](goal){"entity": "goal", "role": "task"} at 4:20
-      - [take a test](goal){"entity": "goal", "role": "task"} today at 1:20
-      - i'll [ask patricia out](goal){"entity": "goal", "role": "task"} at 1:34
+      - i plan to [go for a run]{"entity": "goal", "role": "task"} at 4:20
+      - [take a test]{"entity": "goal", "role": "task"} today at 1:20
+      - i'll [ask patricia out]{"entity": "goal", "role": "task"} at 1:34
       - [run 5 laps]{"entity": "goal", "role": "task"} at 3
       - [run 5 laps]{"entity": "goal", "role": "habit"} every day
       - i'm gonna [go to sleep]{"entity": "goal", "role": "task"} at 9:30
@@ -37,21 +35,30 @@ nlu:
       - i want to [stop procrasinating](goal)
       - my goal is [get better at fighting](goal)
       - my mission is to [become a better boxer]{"entity": "goal", "role": "mission"}
+      - my mission is to [drink more water]{"entity": "goal", "role": "mission"}
+      - my mission is to [find some new friends]{"entity": "goal", "role": "mission"}
+      - my mission is to [inspire others]{"entity": "goal", "role": "mission"}
       - [losing 10 pounds]{"entity": "goal", "role": "mission"} is my mission
+      - [gaining 20 pounds of muscle]{"entity": "goal", "role": "mission"} is my mission
+      - [finding a new job]{"entity": "goal", "role": "mission"} is my mission
       - my new habit is to [jog 10 laps]{"entity": "goal", "role": "habit"}
+      - my new habit is to [do my homework]{"entity": "goal", "role": "habit"}
+      - my new habit is to [make dinner for my family]{"entity": "goal", "role": "habit"}
       - [eating healthy]{"entity": "goal", "role": "habit"} is my new habit
+      - [writing in my day journal]{"entity": "goal", "role": "habit"} is my new habit
+      - [mowing the lawn]{"entity": "goal", "role": "habit"} is my new habit
       - my new task is to [read a book]{"entity": "goal", "role": "task"}
-      - my new task is to [make a picture]{"entity": "goal", "role": "task"} at 4
+      - my new task is to [go to my job interview]{"entity": "goal", "role": "task"} at 4
+      - my new task is to [take the train home]{"entity": "goal", "role": "task"} at 4
       - I really want to [get faster at the 100m](goal)
+      - i want to [build more confidence](goal)
 
-  # - intent: inform
-  #   examples: |
-  #     - 3pm
-  #     - 3:00
-  #     - i think at 2am
-  #     - 2pm
-  #     - 2:00pm
-  #     - 1:45
+  - intent: inform
+    examples: |
+      - my girlfriend broke up with me
+      - got into a fight with my parents
+      - i got fired today
+      - i missed breakfast and now i'm cranky
 
   - intent: motivational_quote
     examples: |
@@ -113,21 +120,29 @@ nlu:
       - amazing
       - feeling like a king
       - wonderful
-      - I am feeling very good
-      - I am great
-      - I am amazing
-      - I am going to save the world
+      - i am feeling very good
+      - i feel good
+      - i am great
+      - i am amazing
+      - i am going to save the world
       - super stoked
       - extremely good
       - so so perfect
       - so good
       - so perfect
+      - today is a great day
+      - motivated
+      - fantastic
 
   - intent: mood_unhappy
     examples: |
       - my day was horrible
+      - unmotivated
+      - not motivated
       - I am sad
       - I don't feel very well
+      - I don't feel good
+      - I’m not feeling so good today
       - I am disappointed
       - super sad
       - I'm so sad
@@ -138,6 +153,8 @@ nlu:
       - not very good
       - extremly sad
       - so saad
+      - bored
+      - boring
       - so sad
 
   - intent: bot_challenge

@@ -20,7 +20,7 @@ pipeline:
     # url of the running duckling server
     url: "http://localhost:8000"
     # dimensions to extract
-    dimensions: ["time"]
+    dimensions: ["time", "number"]
     # Timeout for receiving response from http url of the running duckling server
     # if not set the default timeout of duckling http url is set to 3 seconds.
     timeout: 3

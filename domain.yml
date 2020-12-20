@@ -9,41 +9,48 @@ intents:
   - mood_unhappy
   - bot_challenge
   - motivational_quote
-  # - inform
+  - inform
   - future
 
 entities:
   - goal
   - time
+  - number
 
 forms:
   create_goal_form:
     goal:
-      - type: from_entity
-        entity: goal
-    # goal_type:
-    #   - type: from_entity
-    #     entity: goal_type
+      - type: from_text
     time:
       - type: from_entity
         entity: time
+  record_motivation_form:
+    number:
+      - type: from_entity
+        entity: number
+    actions_today:
+      - type: from_text
 
 slots:
   goal:
     type: text
     influence_conversation: false
-  goal_type:
-    type: categorical
-    values:
-      - task
-      - habit
-      - mission
   time:
     type: any
+  number:
+    type: float
+    influence_conversation: false
+  motivation_num:
+    type: float
+    influence_conversation: false
+  actions_today:
+    type: text
+    influence_conversation: false
 
 responses:
   utter_greet:
-    - text: "Hey! How are you?"
+    - text: "What's up!"
+    - text: "Hey, how are you doing?"
 
   utter_did_that_help:
     - text: "Did that help you?"
@@ -59,6 +66,16 @@ responses:
     - text: "I was developed using artificial intelligence to motivate the human race"
     - text: "I'm not human. I am made from zeros and ones"
 
+  # Mood
+  utter_ask_why_upset:
+    - text: "What's got you down?"
+    - text: "Why don't you feel good?"
+
+  utter_upset_reason_reply:
+    - text: "I'll keep that in mind. Thanks for trusting me with that knowledge"
+
+  utter_upset_quote:
+    - text: "Here's a quote to make you feel better:"
   # Goals
   utter_ask_make_goal:
     - text: "Wanna make this a goal?"
@@ -74,11 +91,33 @@ responses:
 
   utter_goal_created:
     - text: '"{goal}" at {time} added to your MotiGoals'
+
+  # User says they're motivated/unmotivated
+  # Uses motivation_num, actions_today, and number will set motivation_num
+  utter_happy_record_motivation:
+    - text: "That's awesome! Lets record how motivated you are"
+    - text: "Let's record how good you feel!"
+
+  utter_unhappy_record_motivation:
+    - text: "Sorry to hear that! Lets record how motivated you are"
+
+  utter_ask_record_motivation_form_number:
+    - text: "On a scale of 1-10, how motivated do you feel?"
+
+  # utter_ask_record_motivation_form_actions_today:
+  #   - text: "Gimme a summary of what you’ve done (or haven’t done) today"
+  #   - text: "What type of things have you done today?"
+  #   - text: "Let me hear a run-down of what you've done today"
+
+  utter_check_moti_moods:
+    - text: "Take a look at your MotiMoods and see what trends come up"
+
 actions:
   - action_grab_quote
-  - action_which_goal_complete
-  - action_set_task
+  # motivation form
+  - action_ask_record_motivation_form_actions_today
 
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
+# - validate_create_goal_form

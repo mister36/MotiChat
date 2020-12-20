@@ -23,12 +23,29 @@ stories:
           - requested_slot: null
       - action: utter_goal_created
 
+  - story: user is unhappy
+    steps:
+      - intent: mood_unhappy
+      - action: utter_unhappy_record_motivation
+      - action: record_motivation_form
+      - active_loop: record_motivation_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: utter_check_moti_moods
+
+  - story: user is happy
+    steps:
+      - intent: mood_great
+      - action: utter_happy_record_motivation
+      - action: record_motivation_form
+      - active_loop: record_motivation_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: utter_check_moti_moods
+
   - story: asking for motivational quote
     steps:
       - intent: motivational_quote
       - action: action_grab_quote
-
-  # - story: bot asks for tasks & user says time
-  #   steps:
-  #     - intent: say_task
-  #     - action: action_set_task
