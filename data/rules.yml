@@ -1,11 +1,19 @@
 version: "2.0"
 
 rules:
-  # - rule: creating a task/habit/mission happy 1
+  - rule: Say `hello` when the user starts a conversation with intent `greet`
+    conversation_start: true
+    steps:
+      - intent: greet
+      - action: utter_greet
+
+  # - rule: Whenever create_goal_form is submitted, set actual_time
+  #   condition:
+  #     - active_loop: create_goal_form
   #   steps:
-  #     - intent: future
-  #     - slot_was_set:
-  #         - goal
-  #     - action: utter_ask_make_goal
-  #     - intent: affirm
   #     - action: create_goal_form
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: action_get_time_from_text
+  #     - action: action_goal_created

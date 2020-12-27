@@ -3,7 +3,17 @@
 language: en
 
 pipeline:
+  # - name: "MitieNLP"
+  #   model: "data/total_word_feature_extractor.dat"
+  - name: "SpacyNLP"
+    model: "en_core_web_lg"
   - name: WhitespaceTokenizer
+  - name: "ConveRTFeaturizer"
+    model_url: "convert_model/"
+  # - name: LanguageModelFeaturizer
+  #   # Name of the language model to use
+  #   model_name: "gpt2"
+  #   model_weights: "gpt2"
   - name: RegexFeaturizer
   - name: LexicalSyntacticFeaturizer
     features: [
@@ -16,9 +26,8 @@ pipeline:
     analyzer: "char_wb"
     min_ngram: 1
     max_ngram: 4
-  - name: CRFEntityExtractor
   - name: DIETClassifier
-    entity_recognition: false
+    # entity_recognition: false
     epochs: 300
   - name: EntitySynonymMapper
   - name: ResponseSelector
@@ -27,7 +36,10 @@ pipeline:
     # url of the running duckling server
     url: "http://localhost:8000"
     # dimensions to extract
-    dimensions: ["time", "number"]
+    dimensions: ["number", "duration", "time"]
+    # if not set the default timezone of Duckling is going to be used
+    # needed to calculate dates from relative expressions like "tomorrow"
+    timezone: "Etc/GMT-0"
     # Timeout for receiving response from http url of the running duckling server
     # if not set the default timeout of duckling http url is set to 3 seconds.
     timeout: 3
@@ -37,5 +49,7 @@ pipeline:
 policies:
   - name: RulePolicy
   - name: TEDPolicy
-    epochs: 100
+  # make 200 later
+    epochs: 200
   - name: MemoizationPolicy
+# my mission is to land on the moon at 9pm  

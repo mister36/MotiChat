@@ -1,2 +1,7 @@
 models/
 story_graph.dot
+venv/
+convert_model/
+interactive.yml
+.DS_Store
+.vscode/

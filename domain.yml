@@ -11,19 +11,32 @@ intents:
   - motivational_quote
   - inform
   - future
+  # - remind
 
 entities:
-  - goal
+  - goal_mission
+  - goal_habit
+  - goal_task
   - time
   - number
 
 forms:
   create_goal_form:
-    goal:
-      - type: from_text
+    # goal:
+    #   - type: from_entity
+    #     entity: goal
     time:
       - type: from_entity
         entity: time
+
+  # create_reminder_form:
+  #   goal:
+  #     - type: from_entity
+  #       entity: goal
+  #   time:
+  #     - type: from_entity
+  #       entity: time
+
   record_motivation_form:
     number:
       - type: from_entity
@@ -35,14 +48,35 @@ slots:
   goal:
     type: text
     influence_conversation: false
+
+  goal_mission:
+    type: text
+    influence_conversation: false
+
+  goal_habit:
+    type: text
+    influence_conversation: false
+
+  goal_task:
+    type: text
+    influence_conversation: false
+
   time:
-    type: any
+    type: text
+    influence_conversation: true
+
+  actual_time:
+    type: text
+    influence_conversation: true
+
   number:
     type: float
     influence_conversation: false
+
   motivation_num:
     type: float
     influence_conversation: false
+
   actions_today:
     type: text
     influence_conversation: false
@@ -77,20 +111,32 @@ responses:
   utter_upset_quote:
     - text: "Here's a quote to make you feel better:"
   # Goals
-  utter_ask_make_goal:
-    - text: "Wanna make this a goal?"
-    - text: "Goal time?"
-    - text: "How about we make this a goal?"
+  # utter_ask_make_goal:
+  #   - text: "Wanna make this a goal?"
+  #   - text: "Goal time?"
+  #   - text: "How about we make this a goal?"
 
-  utter_ask_create_goal_form_time:
-    - text: "That's great! What time will you do that by?"
+  # utter_create_reminder:
+  #   - text: 'Adding "{goal}" to your MotiGoals'
+
+  # utter_ask_create_goal_form_time:
+  #   - text: "That's great! What time will you do that by?"
+  #   - text: "Sounds like a plan. When do you want to accomplish that?"
 
   utter_ask_create_goal_form_goal:
     - text: "Nice, say your goal in simple words"
     - text: "Alright, tell me the goal you want to make"
 
-  utter_goal_created:
-    - text: '"{goal}" at {time} added to your MotiGoals'
+  # utter_goal_created:
+  #   - text: '"{goal}" at {time} added to your MotiGoals'
+
+  # Reminder
+  # utter_ask_create_reminder_form_goal:
+  #   - text: "What should I remind you?"
+
+  # utter_ask_create_reminder_form_time:
+  #   - text: "What time should I remind you"
+  #   - text: "When should I remind you?"
 
   # User says they're motivated/unmotivated
   # Uses motivation_num, actions_today, and number will set motivation_num
@@ -114,8 +160,14 @@ responses:
 
 actions:
   - action_grab_quote
+  # goal form
+  - action_ask_create_goal_form_time
+  - action_goal_created
+  - validate_create_goal_form
   # motivation form
   - action_ask_record_motivation_form_actions_today
+  # time
+  - action_get_time_from_text
 
 session_config:
   session_expiration_time: 60

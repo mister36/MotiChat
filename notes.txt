@@ -1,0 +1,5 @@
+      - remind me to [find a a new job]{"entity": "goal_from_regex", "role": "task"}
+      - remind me to [find a a new job]{"entity": "goal_from_regex", "role": "task"} at 4pm
+      - remind me to [clean the bathroom]{"entity": "goal_from_regex", "role": "task"}
+      - remind me to [go to school with bookbag]{"entity": "goal_from_regex", "role": "task"}
+      - set a reminder to [wash dishes]{"entity": "goal", "role": "habit"} every monday at 3

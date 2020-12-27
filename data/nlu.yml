@@ -18,40 +18,80 @@ nlu:
       - good afternoon
       - hey what's up
       - hola
+      - wassup
 
   - intent: future
     examples: |
-      - [workout at the gym](goal) at 2:25
-      - i'm gonna [workout at the gym]{"entity": "goal", "role": "task"} at 2
-      - i plan to [go for a run]{"entity": "goal", "role": "task"} at 4:20
-      - [take a test]{"entity": "goal", "role": "task"} today at 1:20
-      - i'll [ask patricia out]{"entity": "goal", "role": "task"} at 1:34
-      - [run 5 laps]{"entity": "goal", "role": "task"} at 3
-      - [run 5 laps]{"entity": "goal", "role": "habit"} every day
-      - i'm gonna [go to sleep]{"entity": "goal", "role": "task"} at 9:30
-      - i will [go to work]{"entity": "goal", "role": "task"} at 3
-      - i will [go to work]{"entity": "goal", "role": "habit"} every monday
-      - at 3 i will [go to work]{"entity": "goal", "role": "task"}
-      - i want to [stop procrasinating](goal)
-      - my goal is [get better at fighting](goal)
-      - my mission is to [become a better boxer]{"entity": "goal", "role": "mission"}
-      - my mission is to [drink more water]{"entity": "goal", "role": "mission"}
-      - my mission is to [find some new friends]{"entity": "goal", "role": "mission"}
-      - my mission is to [inspire others]{"entity": "goal", "role": "mission"}
-      - [losing 10 pounds]{"entity": "goal", "role": "mission"} is my mission
-      - [gaining 20 pounds of muscle]{"entity": "goal", "role": "mission"} is my mission
-      - [finding a new job]{"entity": "goal", "role": "mission"} is my mission
-      - my new habit is to [jog 10 laps]{"entity": "goal", "role": "habit"}
-      - my new habit is to [do my homework]{"entity": "goal", "role": "habit"}
-      - my new habit is to [make dinner for my family]{"entity": "goal", "role": "habit"}
-      - [eating healthy]{"entity": "goal", "role": "habit"} is my new habit
-      - [writing in my day journal]{"entity": "goal", "role": "habit"} is my new habit
-      - [mowing the lawn]{"entity": "goal", "role": "habit"} is my new habit
-      - my new task is to [read a book]{"entity": "goal", "role": "task"}
-      - my new task is to [go to my job interview]{"entity": "goal", "role": "task"} at 4
-      - my new task is to [take the train home]{"entity": "goal", "role": "task"} at 4
-      - I really want to [get faster at the 100m](goal)
-      - i want to [build more confidence](goal)
+      - my goal is [get to greece](goal_mission) at 12:30
+      - my mission is to [become a better boxer](goal_mission)
+      - my mission is to [drink more water](goal_mission)
+      - my mission is to [get healthy](goal_mission) in 5 days
+      - my mission is to [sing at carnegie hall one day](goal_mission)
+      - my mission is to [gain confidence](goal_mission) 2 weeks from now
+      - my mission is to [win the dance competition](goal_mission) tomorrow
+      - my mission is to [find some new friends](goal_mission) by January 1
+      - my mission is to [read 100 books](goal_mission)
+      - my mission is to [find the lost treasure](goal_mission)
+      - my mission is to [get a girlfriend](goal_mission)
+      - my mission is to [graduate college with no debt](goal_mission) by january 2
+      - my mission is to [pay off my student loans](goal_mission)
+      - my mission is to [get all As in physics](goal_mission)
+      - my mission is to [become a good musician](goal_mission) at 5pm
+      - my mission is to [earn a promotion](goal_mission)
+      - my mission is to [get into the army](goal_mission)
+      - my mission is to [play soccer with ronaldo](goal_mission)
+      - my mission is to [leave America](goal_mission) 5 years from now
+      - [losing 10 pounds](goal_mission) is my mission
+      - [losing 10 pounds](goal_mission) is my goal by 3
+      - i wish i could [get a raise](goal_mission)
+      - i wish i [lived in California](goal_mission)
+      - i wish i could [become a famous actor](goal_mission) in 2 years
+      - i wish i could [stop biting my nails](goal_mission)
+      - i wish i could [date Taylor Swift](goal_mission)
+      - i wish i [had a million dollars](goal_mission)
+      - i wish i [owned a tesla](goal_mission)
+      - i wish i [went to the gym more often](goal_mission)
+      - [Having good health](goal_mission) is my mission
+      - [being friends with my kids](goal_mission) is my mission
+      - i want to [lose some weight](goal_mission)
+      - i want to [go to space](goal_mission)
+      - i want to [stop procrasinating](goal_mission) 3 months from now
+      - i want to [live to 80 years old](goal_mission)
+      - I really want to [get faster at the 100m](goal_mission)
+      - i want to [build more confidence](goal_mission)
+      - remind me to [find a new job](goal_task)
+      - remind me to [find a new job](goal_task) at 4pm
+      - remind me to [clean the bathroom](goal_task) 30 minutes from now
+      - remind me to [go to sleep](goal_task) in one hour
+      - remind me to [read my book](goal_task)
+      - remind me to [tuck the kids in](goal_task) in 30 minutes
+      - remind me to [record affirmations](goal_habit) everyday
+      - remind me to [finish watching the boys](goal_habit) every day
+      - remind me to [buy lunch](goal_habit) everyday
+      - remind me to [take the bus to school](goal_task)
+      - remind me to [buy wine for johnny](goal_task) in 12 days
+      - remind me to [run 5 laps](goal_task)
+      - remind me to [pick up students from amusement park](goal_task)
+      - remind me to [eat breakfast](goal_task)
+      - remind me to [do my homework for statistics](goal_habit) every night at 8
+      - remind me to [workout with my friends](goal_task)
+      - remind me to [fire josh and tanya](goal_task)
+      - remind me to [destroy the evidence from the crime](goal_task)
+      - set a reminder to [wash dishes](goal_habit) every monday at 3
+      - [find new friends](goal_task) 3 hours from now
+      - [feed the dog](goal_task) 6 hours from now
+      - [go to gym](goal_task) at 4:21
+      - at 3 i will [go to work](goal_task)
+      - [at 6:30] we will [bring the football](goal_task)
+      - i'm gonna [go to sleep](goal_task) at 9:30
+      - [run 5 laps](goal_task) at 3
+      - i'm gonna [drink some water](goal_task) at 2
+      - i plan to [go for a run](goal_task) at 4:20
+      - i will [relax](goal_habit) every monday
+      - [run 5 laps](goal_habit) every day
+      - [read a book](goal_habit) every night 
+      - [prepare a dinner for my family](goal_habit) every tuesday at 6
+      - i should [workout](goal_habit) every other day
 
   - intent: inform
     examples: |
@@ -166,3 +206,7 @@ nlu:
       - what are you?
       - are you real?
       - are you an actual person?
+
+# remind me to cook pizza at 11pm
+# my mission is to destroy giannis
+#  my mission is to travel to the moon

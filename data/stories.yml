@@ -11,17 +11,34 @@ stories:
       - intent: greet
       - action: utter_greet
 
-  - story: creating a task/habit/mission happy 1
+  - story: creating a mission happy 1 (actual_time slot not set at first)
     steps:
       - intent: future
-      - action: utter_ask_make_goal
-      - intent: affirm
       - action: create_goal_form
+      - slot_was_set:
+          - time: "any"
       - active_loop: create_goal_form
       - active_loop: null
       - slot_was_set:
           - requested_slot: null
-      - action: utter_goal_created
+      - action: action_get_time_from_text
+      - slot_was_set:
+          - actual_time: "any"
+      - action: action_goal_created
+
+  # - story: creating a mission happy 2 (actual_time slot set when asked by form)
+  #   steps:
+  #     - intent: future
+  #     # no "time" slot set, so start form
+  #     - action: create_goal_form
+  #     - active_loop: create_goal_form
+  #     - slot_was_set:
+  #         - actual_time: "any"
+  #     # - action: action_get_time_from_text
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: action_goal_created
 
   - story: user is unhappy
     steps:
