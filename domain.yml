@@ -11,23 +11,34 @@ intents:
   - motivational_quote
   - inform
   - future
+  - set_info
+  - new_user
   # - remind
 
 entities:
-  - goal_mission
+  - mission
   - goal_habit
   - goal_task
   - time
   - number
+  - user_name
+  - user_email
 
 forms:
-  create_goal_form:
-    # goal:
-    #   - type: from_entity
-    #     entity: goal
+  new_mission_form:
+    mission:
+      - type: from_text
     time:
       - type: from_entity
         entity: time
+
+  # create_goal_form:
+  #   # goal:
+  #   #   - type: from_entity
+  #   #     entity: goal
+  #   time:
+  #     - type: from_entity
+  #       entity: time
 
   # create_reminder_form:
   #   goal:
@@ -49,7 +60,15 @@ slots:
     type: text
     influence_conversation: false
 
-  goal_mission:
+  mission:
+    type: text
+    influence_conversation: false
+
+  user_name:
+    type: text
+    influence_conversation: false
+
+  user_email:
     type: text
     influence_conversation: false
 
@@ -86,12 +105,6 @@ responses:
     - text: "What's up!"
     - text: "Hey, how are you doing?"
 
-  utter_did_that_help:
-    - text: "Did that help you?"
-
-  utter_happy:
-    - text: "Great, carry on!"
-
   utter_goodbye:
     - text: "Bye"
 
@@ -99,6 +112,10 @@ responses:
     - text: "I am your motivational assistant, Moti"
     - text: "I was developed using artificial intelligence to motivate the human race"
     - text: "I'm not human. I am made from zeros and ones"
+
+  # ANCHOR: New mission form
+  utter_ask_new_mission_form_time:
+    - text: "Great! When do you want to accomplish this?"
 
   # Mood
   utter_ask_why_upset:
@@ -159,6 +176,13 @@ responses:
     - text: "Take a look at your MotiMoods and see what trends come up"
 
 actions:
+  # new user
+  - action_new_user
+  # mission
+  - action_ask_new_mission_form_mission
+  - action_ask_new_mission_form_time
+  - action_save_mission
+  # quote
   - action_grab_quote
   # goal form
   - action_ask_create_goal_form_time

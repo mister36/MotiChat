@@ -1,6 +1,30 @@
 version: "2.0"
 
 nlu:
+  - regex: new_user
+    examples: |
+      - ^wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt$
+
+  - regex: set_info
+    examples: |
+      - ^P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS$
+
+  # NOTE: Only called by MotiAPI
+  - intent: new_user
+    examples: |
+      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+
+  # NOTE: Only called by MotiAPI
+  - intent: set_info
+    examples: |
+      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+
   - intent: greet
     examples: |
       - hey
@@ -22,43 +46,43 @@ nlu:
 
   - intent: future
     examples: |
-      - my goal is [get to greece](goal_mission) at 12:30
-      - my mission is to [become a better boxer](goal_mission)
-      - my mission is to [drink more water](goal_mission)
-      - my mission is to [get healthy](goal_mission) in 5 days
-      - my mission is to [sing at carnegie hall one day](goal_mission)
-      - my mission is to [gain confidence](goal_mission) 2 weeks from now
-      - my mission is to [win the dance competition](goal_mission) tomorrow
-      - my mission is to [find some new friends](goal_mission) by January 1
-      - my mission is to [read 100 books](goal_mission)
-      - my mission is to [find the lost treasure](goal_mission)
-      - my mission is to [get a girlfriend](goal_mission)
-      - my mission is to [graduate college with no debt](goal_mission) by january 2
-      - my mission is to [pay off my student loans](goal_mission)
-      - my mission is to [get all As in physics](goal_mission)
-      - my mission is to [become a good musician](goal_mission) at 5pm
-      - my mission is to [earn a promotion](goal_mission)
-      - my mission is to [get into the army](goal_mission)
-      - my mission is to [play soccer with ronaldo](goal_mission)
-      - my mission is to [leave America](goal_mission) 5 years from now
-      - [losing 10 pounds](goal_mission) is my mission
-      - [losing 10 pounds](goal_mission) is my goal by 3
-      - i wish i could [get a raise](goal_mission)
-      - i wish i [lived in California](goal_mission)
-      - i wish i could [become a famous actor](goal_mission) in 2 years
-      - i wish i could [stop biting my nails](goal_mission)
-      - i wish i could [date Taylor Swift](goal_mission)
-      - i wish i [had a million dollars](goal_mission)
-      - i wish i [owned a tesla](goal_mission)
-      - i wish i [went to the gym more often](goal_mission)
-      - [Having good health](goal_mission) is my mission
-      - [being friends with my kids](goal_mission) is my mission
-      - i want to [lose some weight](goal_mission)
-      - i want to [go to space](goal_mission)
-      - i want to [stop procrasinating](goal_mission) 3 months from now
-      - i want to [live to 80 years old](goal_mission)
-      - I really want to [get faster at the 100m](goal_mission)
-      - i want to [build more confidence](goal_mission)
+      - my goal is [get to greece](mission) at 12:30
+      - my mission is to [become a better boxer](mission)
+      - my mission is to [drink more water](mission)
+      - my mission is to [get healthy](mission) in 5 days
+      - my mission is to [sing at carnegie hall one day](mission)
+      - my mission is to [gain confidence](mission) 2 weeks from now
+      - my mission is to [win the dance competition](mission) tomorrow
+      - my mission is to [find some new friends](mission) by January 1
+      - my mission is to [read 100 books](mission)
+      - my mission is to [find the lost treasure](mission)
+      - my mission is to [get a girlfriend](mission)
+      - my mission is to [graduate college with no debt](mission) by january 2
+      - my mission is to [pay off my student loans](mission)
+      - my mission is to [get all As in physics](mission)
+      - my mission is to [become a good musician](mission) at 5pm
+      - my mission is to [earn a promotion](mission)
+      - my mission is to [get into the army](mission)
+      - my mission is to [play soccer with ronaldo](mission)
+      - my mission is to [leave America](mission) 5 years from now
+      - [losing 10 pounds](mission) is my mission
+      - [losing 10 pounds](mission) is my goal by 3
+      - i wish i could [get a raise](mission)
+      - i wish i [lived in California](mission)
+      - i wish i could [become a famous actor](mission) in 2 years
+      - i wish i could [stop biting my nails](mission)
+      - i wish i could [date Taylor Swift](mission)
+      - i wish i [had a million dollars](mission)
+      - i wish i [owned a tesla](mission)
+      - i wish i [went to the gym more often](mission)
+      - [Having good health](mission) is my mission
+      - [being friends with my kids](mission) is my mission
+      - i want to [lose some weight](mission)
+      - i want to [go to space](mission)
+      - i want to [stop procrasinating](mission) 3 months from now
+      - i want to [live to 80 years old](mission)
+      - I really want to [get faster at the 100m](mission)
+      - i want to [build more confidence](mission)
       - remind me to [find a new job](goal_task)
       - remind me to [find a new job](goal_task) at 4pm
       - remind me to [clean the bathroom](goal_task) 30 minutes from now
@@ -118,7 +142,6 @@ nlu:
 
   - intent: goodbye
     examples: |
-      - good afternoon
       - cu
       - good by
       - cee you later
