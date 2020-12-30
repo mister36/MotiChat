@@ -22,7 +22,7 @@ rules:
     # conversation_start: true
     steps:
       - intent: new_user
-      - action: action_new_user
+      - action: action_new_user_mission
       - action: new_mission_form
       - active_loop: new_mission_form
       - slot_was_set:
@@ -32,6 +32,48 @@ rules:
           - requested_slot: null
       - action: action_get_time_from_text
       - action: action_save_mission
+      - action: action_reset_time
+      - slot_was_set:
+          - time: null
+      ################################
+      - action: action_new_user_goal
+      - action: new_goal_form
+      - active_loop: new_goal_form
+      - slot_was_set:
+          - time: "time"
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: action_get_time_from_text
+      - action: action_save_goal
+      - slot_was_set:
+          - time: null
+      - action: action_listen
+
+  # - rule: New user continued
+  #   condition:
+  #     - active_loop: new_mission_form
+  #     - slot_was_set:
+  #         - time: "time"
+  #   steps:
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: action_get_time_from_text
+  #     - action: action_save_mission
+  #     - action: action_reset_time
+  #     ################################
+  #     - action: action_new_user_goal
+  #     - action: new_goal_form
+  #     - active_loop: new_goal_form
+  #     - slot_was_set:
+  #         - time: "time"
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: action_get_time_from_text
+  #     - action: action_save_goal
+  #     - action: action_reset_time
 
   # - rule: Whenever create_goal_form is submitted, set actual_time
   #   condition:

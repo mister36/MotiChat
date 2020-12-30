@@ -32,6 +32,13 @@ forms:
       - type: from_entity
         entity: time
 
+  new_goal_form:
+    goal:
+      - type: from_text
+    time:
+      - type: from_entity
+        entity: time
+
   # create_goal_form:
   #   # goal:
   #   #   - type: from_entity
@@ -114,8 +121,18 @@ responses:
     - text: "I'm not human. I am made from zeros and ones"
 
   # ANCHOR: New mission form
+  utter_ask_new_mission_form_mission:
+    - text: "So, {user_name}, what is your mission? Be as specific as possible:"
+
   utter_ask_new_mission_form_time:
     - text: "Great! When do you want to accomplish this?"
+
+  # ANCHOR: New goal form
+  utter_ask_new_goal_form_goal:
+    - text: "Now, what’s one thing you can do that will help you reach your mission?"
+
+  utter_ask_new_goal_form_time:
+    - text: "When will you do that?"
 
   # Mood
   utter_ask_why_upset:
@@ -177,11 +194,12 @@ responses:
 
 actions:
   # new user
-  - action_new_user
+  - action_new_user_mission
+  - action_new_user_goal
   # mission
-  - action_ask_new_mission_form_mission
-  - action_ask_new_mission_form_time
   - action_save_mission
+  # goal
+  - action_save_goal
   # quote
   - action_grab_quote
   # goal form
@@ -192,6 +210,7 @@ actions:
   - action_ask_record_motivation_form_actions_today
   # time
   - action_get_time_from_text
+  - action_reset_time
 
 session_config:
   session_expiration_time: 60
