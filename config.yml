@@ -8,6 +8,7 @@ pipeline:
   - name: "SpacyNLP"
     model: "en_core_web_lg"
   - name: WhitespaceTokenizer
+  - name: "sentiment.SentimentAnalyzer"
   - name: "ConveRTFeaturizer"
     model_url: "convert_model/"
   # - name: LanguageModelFeaturizer

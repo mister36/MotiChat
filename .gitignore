@@ -5,3 +5,4 @@ convert_model/
 interactive.yml
 .DS_Store
 .vscode/
+__pycache__/

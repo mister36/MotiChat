@@ -23,6 +23,7 @@ entities:
   - number
   - user_name
   - user_email
+  - sentiment
 
 forms:
   new_mission_form:
