@@ -6,63 +6,100 @@ stories:
       - intent: bot_challenge
       - action: utter_iam_bot
 
-  - story: greet happy 1
+  - story: user asks how to improve mood
+    steps:
+      - intent: improve_mood
+      - action: action_improve_mood
+      - slot_was_set:
+          # TODO: May have to make custom slot type so value can be read
+          - improve_mood_with: "fruit"
+      - intent: affirm
+      - action: utter_dig_in
+
+  - story: mood happy 1
     steps:
       - intent: greet
       - action: utter_greet
-
-  # - story: creating a mission happy 1 (actual_time slot not set at first)
-  #   steps:
-  #     - intent: future
-  #     - action: create_goal_form
-  #     - slot_was_set:
-  #         - time: "any"
-  #     - active_loop: create_goal_form
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: action_get_time_from_text
-  #     - slot_was_set:
-  #         - actual_time: "any"
-  #     - action: action_goal_created
-
-  # - story: creating a mission happy 2 (actual_time slot set when asked by form)
-  #   steps:
-  #     - intent: future
-  #     # no "time" slot set, so start form
-  #     - action: create_goal_form
-  #     - active_loop: create_goal_form
-  #     - slot_was_set:
-  #         - actual_time: "any"
-  #     # - action: action_get_time_from_text
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: action_goal_created
-
-  - story: user is unhappy
-    steps:
-      - intent: mood_unhappy
-      - action: utter_unhappy_record_motivation
-      - action: record_motivation_form
-      - active_loop: record_motivation_form
+      - intent: feeling
+      - slot_was_set:
+          - sentiment: 0.7
+      - action: record_mood_form
+      - active_loop: record_mood_form
+      - slot_was_set:
+          - sentiment_for_form: 0.7
       - active_loop: null
       - slot_was_set:
           - requested_slot: null
-      - action: utter_check_moti_moods
+      - action: action_save_mood
 
-  - story: user is happy
-    steps:
-      - intent: mood_great
-      - action: utter_happy_record_motivation
-      - action: record_motivation_form
-      - active_loop: record_motivation_form
-      - active_loop: null
-      - slot_was_set:
-          - requested_slot: null
-      - action: utter_check_moti_moods
+  # - story: user is unhappy
+  #   steps:
+  #     - intent: mood_unhappy
+  #     - action: utter_unhappy_record_motivation
+  #     - action: record_motivation_form
+  #     - active_loop: record_motivation_form
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: utter_check_moti_moods
 
-  - story: asking for motivational quote
-    steps:
-      - intent: motivational_quote
-      - action: action_grab_quote
+  # - story: user is happy
+  #   steps:
+  #     - intent: mood_great
+  #     - action: utter_happy_record_motivation
+  #     - action: record_motivation_form
+  #     - active_loop: record_motivation_form
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: utter_check_moti_moods
+
+  # - story: asking for motivational quote happy 1
+  #   steps:
+  #     - intent: motivational_quote
+  #       entities:
+  #         - sentiment: -0.6
+  #     - slot_was_set:
+  #         - sentiment: -0.6
+  #     - action: utter_test1
+  #     - action: action_grab_quote
+
+  # - story: asking for motivational quote happy 2
+  #   steps:
+  #     - intent: motivational_quote
+  #       entities:
+  #         - sentiment: -0.3
+  #     - slot_was_set:
+  #         - sentiment: -0.3
+  #     - action: utter_test2
+  #     - action: action_grab_quote
+
+  # - story: asking for motivational quote happy 3
+  #   steps:
+  #     - intent: motivational_quote
+  #       entities:
+  #         - sentiment: 0.0
+  #     - slot_was_set:
+  #         - sentiment: 0.0
+  #     - action: utter_test3
+  #     - action: action_grab_quote
+
+  # - story: asking for motivational quote happy 4
+  #   steps:
+  #     - intent: motivational_quote
+  #       entities:
+  #         - sentiment: 0.3
+  #     - slot_was_set:
+  #         - sentiment: 0.3
+  #     - action: utter_test4
+  #     - action: action_grab_quote
+
+  # - story: asking for motivational quote happy 5
+  #   steps:
+  #     - intent: motivational_quote
+  #       entities:
+  #         - sentiment: 0.6
+  #     - slot_was_set:
+  #         - sentiment: 0.6
+  #     - action: utter_test5
+  #     - action: action_grab_quote

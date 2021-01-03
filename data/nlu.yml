@@ -44,6 +44,43 @@ nlu:
       - hola
       - wassup
 
+  - intent: feeling
+    examples: |
+      - I’m feeling pretty good
+      - Terrible man
+      - Not so good 
+      - I feel great 
+      - Doing great Moti  
+      - I'm alright
+      - Decent 
+      - Fine, how bout you
+      - Not so hot
+
+  - intent: improve_mood
+    examples: |
+      - Do you know how I can improve my mood?
+      - how do i feel better 
+      - any way i can start to feel better moti?
+      - i want to improve my mood 
+      - feel happier
+
+  - intent: new_goal
+    examples: |
+      - let's make a new goal 
+      - new goal moti
+      - i want to create a goal
+      - create a task
+      - create a habit 
+      - i want to develop a habit 
+      - new habit please 
+      - hey moti, make a new habit for me please 
+      - feel like adding a goal to my mission
+      - add a habit 
+      - i need another goal for my mission 
+      - create a new goal
+      - need a goal fo
+      - add to my routine
+
   # - intent: future
   #   examples: |
   #     - my goal is [get to greece](mission) at 12:30
@@ -165,6 +202,7 @@ nlu:
       - yep 
       - lets do it  
       - okay
+      - yessir
 
   - intent: deny
     examples: |
@@ -176,49 +214,49 @@ nlu:
       - no way
       - not really
 
-  - intent: mood_great
-    examples: |
-      - perfect
-      - great
-      - amazing
-      - feeling like a king
-      - wonderful
-      - i am feeling very good
-      - i feel good
-      - i am great
-      - i am amazing
-      - i am going to save the world
-      - super stoked
-      - extremely good
-      - so so perfect
-      - so good
-      - so perfect
-      - today is a great day
-      - motivated
-      - fantastic
+  # - intent: mood_great
+  #   examples: |
+  #     - perfect
+  #     - great
+  #     - amazing
+  #     - feeling like a king
+  #     - wonderful
+  #     - i am feeling very good
+  #     - i feel good
+  #     - i am great
+  #     - i am amazing
+  #     - i am going to save the world
+  #     - super stoked
+  #     - extremely good
+  #     - so so perfect
+  #     - so good
+  #     - so perfect
+  #     - today is a great day
+  #     - motivated
+  #     - fantastic
 
-  - intent: mood_unhappy
-    examples: |
-      - my day was horrible
-      - unmotivated
-      - not motivated
-      - I am sad
-      - I don't feel very well
-      - I don't feel good
-      - I’m not feeling so good today
-      - I am disappointed
-      - super sad
-      - I'm so sad
-      - sad
-      - very sad
-      - unhappy
-      - not good
-      - not very good
-      - extremly sad
-      - so saad
-      - bored
-      - boring
-      - so sad
+  # - intent: mood_unhappy
+  #   examples: |
+  #     - my day was horrible
+  #     - unmotivated
+  #     - not motivated
+  #     - I am sad
+  #     - I don't feel very well
+  #     - I don't feel good
+  #     - I’m not feeling so good today
+  #     - I am disappointed
+  #     - super sad
+  #     - I'm so sad
+  #     - sad
+  #     - very sad
+  #     - unhappy
+  #     - not good
+  #     - not very good
+  #     - extremly sad
+  #     - so saad
+  #     - bored
+  #     - boring
+  #     - so sad
 
   - intent: bot_challenge
     examples: |

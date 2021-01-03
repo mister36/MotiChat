@@ -1,93 +1,117 @@
 version: "2.0"
+# If this doesn't work, reset the time slot again
 
 intents:
   - greet
   - goodbye
   - affirm
   - deny
-  - mood_great
-  - mood_unhappy
+  # - mood_great
+  # - mood_unhappy
   - bot_challenge
   - motivational_quote
   - inform
   - future
   - set_info
   - new_user
-  # - remind
+  - feeling
+  - improve_mood
+  - new_goal
 
 entities:
   - mission
-  - goal_habit
-  - goal_task
   - time
   - number
+  - duration
   - user_name
   - user_email
+  - user_id
+  - user_is_new
   - sentiment
 
 forms:
   new_mission_form:
     mission:
       - type: from_text
-    time:
+    mission_end:
       - type: from_entity
         entity: time
 
   new_goal_form:
     goal:
       - type: from_text
-    time:
+    goal_end:
       - type: from_entity
         entity: time
 
-  # create_goal_form:
-  #   # goal:
-  #   #   - type: from_entity
-  #   #     entity: goal
-  #   time:
-  #     - type: from_entity
-  #       entity: time
-
-  # create_reminder_form:
-  #   goal:
-  #     - type: from_entity
-  #       entity: goal
-  #   time:
-  #     - type: from_entity
-  #       entity: time
-
-  record_motivation_form:
-    number:
-      - type: from_entity
-        entity: number
-    actions_today:
+  record_mood_form:
+    mood_reason:
       - type: from_text
 
 slots:
-  goal:
-    type: text
-    influence_conversation: false
-
+  # SECTION: Mission & goals
   mission:
     type: text
     influence_conversation: false
+    auto_fill: false
 
+  mission_end:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+  goal:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+  goal_end:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+  # SECTION: User info
   user_name:
     type: text
     influence_conversation: false
+    # TODO: Remove this value
+    initial_value: "Lila"
 
   user_email:
     type: text
     influence_conversation: false
+    initial_value: "lila@gmail.com"
 
-  goal_habit:
+  user_id:
     type: text
     influence_conversation: false
+    initial_value: "5fe825e39fb9ba71e7320534"
 
-  goal_task:
-    type: text
+  user_is_new:
+    type: bool
     influence_conversation: false
+    initial_value: true
 
+  # SECTION: Sentiment
+  sentiment:
+    type: slots.sentimentSlot.SentimentScoreSlot
+
+  sentiment_for_form:
+    type: float
+    influence_conversation: true
+
+  # SECTION: Mood
+  improve_mood_with:
+    type: categorical
+    values:
+      - fruit
+    influence_conversation: true
+
+  mood_reason:
+    type: text
+    influence_conversation: true
+
+  # SECTION: Numbers
   time:
     type: text
     influence_conversation: true
@@ -100,18 +124,11 @@ slots:
     type: float
     influence_conversation: false
 
-  motivation_num:
-    type: float
-    influence_conversation: false
-
-  actions_today:
-    type: text
-    influence_conversation: false
-
 responses:
   utter_greet:
     - text: "What's up!"
     - text: "Hey, how are you doing?"
+    - text: "Hey {user_name}! How you feeling?"
 
   utter_goodbye:
     - text: "Bye"
@@ -125,70 +142,19 @@ responses:
   utter_ask_new_mission_form_mission:
     - text: "So, {user_name}, what is your mission? Be as specific as possible:"
 
-  utter_ask_new_mission_form_time:
+  utter_ask_new_mission_form_mission_end:
     - text: "Great! When do you want to accomplish this?"
 
   # ANCHOR: New goal form
   utter_ask_new_goal_form_goal:
     - text: "Now, what’s one thing you can do that will help you reach your mission?"
 
-  utter_ask_new_goal_form_time:
+  utter_ask_new_goal_form_goal_end:
     - text: "When will you do that?"
 
-  # Mood
-  utter_ask_why_upset:
-    - text: "What's got you down?"
-    - text: "Why don't you feel good?"
-
-  utter_upset_reason_reply:
-    - text: "I'll keep that in mind. Thanks for trusting me with that knowledge"
-
-  utter_upset_quote:
-    - text: "Here's a quote to make you feel better:"
-  # Goals
-  # utter_ask_make_goal:
-  #   - text: "Wanna make this a goal?"
-  #   - text: "Goal time?"
-  #   - text: "How about we make this a goal?"
-
-  # utter_create_reminder:
-  #   - text: 'Adding "{goal}" to your MotiGoals'
-
-  # utter_ask_create_goal_form_time:
-  #   - text: "That's great! What time will you do that by?"
-  #   - text: "Sounds like a plan. When do you want to accomplish that?"
-
-  utter_ask_create_goal_form_goal:
-    - text: "Nice, say your goal in simple words"
-    - text: "Alright, tell me the goal you want to make"
-
-  # utter_goal_created:
-  #   - text: '"{goal}" at {time} added to your MotiGoals'
-
-  # Reminder
-  # utter_ask_create_reminder_form_goal:
-  #   - text: "What should I remind you?"
-
-  # utter_ask_create_reminder_form_time:
-  #   - text: "What time should I remind you"
-  #   - text: "When should I remind you?"
-
-  # User says they're motivated/unmotivated
-  # Uses motivation_num, actions_today, and number will set motivation_num
-  utter_happy_record_motivation:
-    - text: "That's awesome! Lets record how motivated you are"
-    - text: "Let's record how good you feel!"
-
-  utter_unhappy_record_motivation:
-    - text: "Sorry to hear that! Lets record how motivated you are"
-
-  utter_ask_record_motivation_form_number:
-    - text: "On a scale of 1-10, how motivated do you feel?"
-
-  # utter_ask_record_motivation_form_actions_today:
-  #   - text: "Gimme a summary of what you’ve done (or haven’t done) today"
-  #   - text: "What type of things have you done today?"
-  #   - text: "Let me hear a run-down of what you've done today"
+  # ANCHOR: Mood
+  utter_dig_in:
+    - text: "Dig in😋"
 
   utter_check_moti_moods:
     - text: "Take a look at your MotiMoods and see what trends come up"
@@ -199,21 +165,21 @@ actions:
   - action_new_user_goal
   # mission
   - action_save_mission
-  # goal
-  - action_save_goal
+  # mood
+  - action_ask_record_mood_form_mood_reason
+  - action_save_mood
+  - action_improve_mood
   # quote
   - action_grab_quote
-  # goal form
-  - action_ask_create_goal_form_time
-  - action_goal_created
-  - validate_create_goal_form
-  # motivation form
-  - action_ask_record_motivation_form_actions_today
+  # goal
+  - action_save_goal
   # time
   - action_get_time_from_text
   - action_reset_time
+  # form validation
+  - validate_new_goal_form
+  - validate_record_mood_form
 
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
-# - validate_create_goal_form

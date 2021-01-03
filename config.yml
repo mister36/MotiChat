@@ -1,5 +1,6 @@
 # Configuration for Rasa NLU.
 # https://rasa.com/docs/rasa/nlu/components/
+# Running: rasa run --connector socketio --cors "*"
 language: en
 
 pipeline:
@@ -29,6 +30,7 @@ pipeline:
     max_ngram: 4
   - name: DIETClassifier
     # entity_recognition: false
+    # TODO: Increase to 300
     epochs: 300
   - name: EntitySynonymMapper
   - name: ResponseSelector
@@ -51,6 +53,6 @@ policies:
   - name: RulePolicy
   - name: TEDPolicy
   # make 200 later
-    epochs: 200
+    epochs: 100
   - name: MemoizationPolicy
 # my mission is to land on the moon at 9pm  

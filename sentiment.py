@@ -12,7 +12,7 @@ if typing.TYPE_CHECKING:
 
 import nltk
 nltk.download('vader_lexicon')
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import os
 
 class SentimentAnalyzer(Component):
@@ -49,7 +49,7 @@ class SentimentAnalyzer(Component):
                   "entity": "sentiment",
                   "start": start,
                   "end": end,
-                  "extractor": "sentiment_extractor"}
+                  "extractor": "SentimentExtractor"}
 
         return entity
 

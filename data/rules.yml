@@ -1,12 +1,6 @@
 version: "2.0"
 
 rules:
-  - rule: Say `hello` when the user starts a conversation with intent `greet`
-    conversation_start: true
-    steps:
-      - intent: greet
-      - action: utter_greet
-
   - rule: Listen after "user_name" and "user_email" are set
     # TODO: Add "conversaton_start" after testing is done
     steps:
@@ -17,71 +11,164 @@ rules:
           - user_email: "email"
       - action: action_listen
 
-  - rule: Whenever 'new_user' intent, send the new-user dialogue
+  - rule: Whenever 'new_user' intent, create mission
     # TODO: Add "conversaton_start" after testing is done
     # conversation_start: true
     steps:
       - intent: new_user
       - action: action_new_user_mission
+      #   New mission form
       - action: new_mission_form
       - active_loop: new_mission_form
+      #   will set the time slot
       - slot_was_set:
-          - time: "time"
+          - time: "any"
+
+  - rule: submit "new_mission_form", start "new_goal_form"
+    condition:
+      - active_loop: new_mission_form
+    steps:
+      #   will set the time slot
+      - slot_was_set:
+          - time: "any"
+      - action: new_mission_form
       - active_loop: null
-      - slot_was_set:
-          - requested_slot: null
       - action: action_get_time_from_text
+      - slot_was_set:
+          - actual_time: "anything"
+      # save mission
       - action: action_save_mission
+      #  resets time
       - action: action_reset_time
       - slot_was_set:
           - time: null
-      ################################
+      - slot_was_set:
+          - actual_time: null
+      - slot_was_set:
+          - mission_end: null
+      - slot_was_set:
+          - goal_end: null
+        #################
       - action: action_new_user_goal
+      #   start goal form
       - action: new_goal_form
       - active_loop: new_goal_form
+      #   will set the time slot
       - slot_was_set:
-          - time: "time"
+          - time: "any"
+
+  # if this doesn't work, bring back the validate action
+  #  and if time isn't set buy goal_end is, unset goal_end
+
+  - rule: submit "new_goal_form"
+    condition:
+      - active_loop: new_goal_form
+    steps:
+      #   will set the time slot
+      - slot_was_set:
+          - time: "any"
+      - action: new_goal_form
       - active_loop: null
-      - slot_was_set:
-          - requested_slot: null
       - action: action_get_time_from_text
+      - slot_was_set:
+          - actual_time: "anything"
+        #   save goal
       - action: action_save_goal
+      #  resets time
+      - action: action_reset_time
       - slot_was_set:
           - time: null
-      - action: action_listen
+      - slot_was_set:
+          - actual_time: null
+      - slot_was_set:
+          - mission_end: null
+      - slot_was_set:
+          - goal_end: null
+#   - rule: When user makes new mission, start "new_goal_form"
+#     condition:
+#     - active_loop:
+#   - active_loop: new_mission_form
+#   - slot_was_set:
+#       - mission: "anything1"
+#   - slot_was_set:
+#       - time: "anything2"
+#   - active_loop: null
+#   - slot_was_set:
+#       - requested_slot: null
+#   - action: action_get_time_from_text
+#   - slot_was_set:
+#       - actual_time: "anything3"
+#     # Save mission, reset time slots
+#   - action: action_save_mission
+#   - action: action_reset_time
+#   - slot_was_set:
+#       - time: null
+#   - slot_was_set:
+#       - actual_time: null
+#   ################################
+#   #   Make new goal
+#   - action: action_new_user_goal
+#   #   New goal form
+#   - action: new_goal_form
+#   - active_loop: new_goal_form
+#   - slot_was_set:
+#       - goal: "anything4"
+#   - action: action_reset_time
+#   - slot_was_set:
+#       - time: null
+#   - slot_was_set:
+#       - actual_time: null
+#     #   TODO: Might have to format this
+#   - active_loop: new_goal_form
+#   - slot_was_set:
+#       - time: "anything5"
+#   - active_loop: null
+#   - slot_was_set:
+#       - requested_slot: null
+#   - action: action_get_time_from_text
+#   - slot_was_set:
+#       - actual_time: "anything6"
+#     #  Save goal, reset time slots
+#   - action: action_save_goal
+#   - action: action_reset_time
+#   - slot_was_set:
+#       - time: null
+#   - slot_was_set:
+#       - actual_time: null
+#   - action: action_listen
 
-  # - rule: New user continued
-  #   condition:
-  #     - active_loop: new_mission_form
-  #     - slot_was_set:
-  #         - time: "time"
-  #   steps:
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: action_get_time_from_text
-  #     - action: action_save_mission
-  #     - action: action_reset_time
-  #     ################################
-  #     - action: action_new_user_goal
-  #     - action: new_goal_form
-  #     - active_loop: new_goal_form
-  #     - slot_was_set:
-  #         - time: "time"
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: action_get_time_from_text
-  #     - action: action_save_goal
-  #     - action: action_reset_time
+# - rule: New user continued
+#   condition:
+#     - active_loop: new_mission_form
+#     - slot_was_set:
+#         - time: "time"
+#   steps:
+#     - active_loop: null
+#     - slot_was_set:
+#         - requested_slot: null
+#     - action: action_get_time_from_text
+#     - action: action_save_mission
+#     - action: action_reset_time
+#     ################################
+#     - action: action_new_user_goal
+#     - action: new_goal_form
+#     - active_loop: new_goal_form
+#     - slot_was_set:
+#         - time: "time"
+#     - active_loop: null
+#     - slot_was_set:
+#         - requested_slot: null
+#     - action: action_get_time_from_text
+#     - action: action_save_goal
+#     - action: action_reset_time
 
-  # - rule: Whenever create_goal_form is submitted, set actual_time
-  #   condition:
-  #     - active_loop: create_goal_form
-  #   steps:
-  #     - action: create_goal_form
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: action_get_time_from_text
-  #     - action: action_goal_created
+# - rule: Whenever create_goal_form is submitted, set actual_time
+#   condition:
+#     - active_loop: create_goal_form
+#   steps:
+#     - action: create_goal_form
+#     - active_loop: null
+#     - slot_was_set:
+#         - requested_slot: null
+#     - action: action_get_time_from_text
+#     - action: action_goal_created
