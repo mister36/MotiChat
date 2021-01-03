@@ -55,4 +55,3 @@ policies:
   # make 200 later
     epochs: 100
   - name: MemoizationPolicy
-# my mission is to land on the moon at 9pm  

@@ -30,6 +30,8 @@ entities:
   - sentiment
 
 forms:
+  # NOTE: Each form slot should have "influence_conversation: false"
+  # and "auto_fill: false"
   new_mission_form:
     mission:
       - type: from_text
@@ -39,6 +41,8 @@ forms:
 
   new_goal_form:
     goal:
+      - type: from_text
+    goal_type:
       - type: from_text
     goal_end:
       - type: from_entity
@@ -61,6 +65,11 @@ slots:
     auto_fill: false
 
   goal:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+  goal_type:
     type: text
     influence_conversation: false
     auto_fill: false
@@ -90,7 +99,7 @@ slots:
   user_is_new:
     type: bool
     influence_conversation: false
-    initial_value: true
+    initial_value: false
 
   # SECTION: Sentiment
   sentiment:
@@ -109,7 +118,8 @@ slots:
 
   mood_reason:
     type: text
-    influence_conversation: true
+    influence_conversation: false
+    auto_fill: false
 
   # SECTION: Numbers
   time:
@@ -146,11 +156,14 @@ responses:
     - text: "Great! When do you want to accomplish this?"
 
   # ANCHOR: New goal form
-  utter_ask_new_goal_form_goal:
-    - text: "Now, what’s one thing you can do that will help you reach your mission?"
+  # utter_ask_new_goal_form_goal:
+  #   - text: "Now, what’s one thing you can do that will help you reach your mission?"
+  utter_ask_new_goal_form_goal_type:
+    - text: "Every day, or just one time?"
 
-  utter_ask_new_goal_form_goal_end:
-    - text: "When will you do that?"
+  # utter_ask_new_goal_form_goal_end:
+  #   - text: "When will you do that?"
+  #   - text: "When will you complete it?"
 
   # ANCHOR: Mood
   utter_dig_in:
@@ -172,6 +185,8 @@ actions:
   # quote
   - action_grab_quote
   # goal
+  - action_ask_new_goal_form_goal
+  - action_ask_new_goal_form_goal_end
   - action_save_goal
   # time
   - action_get_time_from_text

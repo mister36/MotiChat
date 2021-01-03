@@ -69,7 +69,6 @@ nlu:
       - let's make a new goal 
       - new goal moti
       - i want to create a goal
-      - create a task
       - create a habit 
       - i want to develop a habit 
       - new habit please 
@@ -78,7 +77,7 @@ nlu:
       - add a habit 
       - i need another goal for my mission 
       - create a new goal
-      - need a goal fo
+      - need a goal for my mission
       - add to my routine
 
   # - intent: future

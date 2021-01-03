@@ -1,10 +1,28 @@
 version: "2.0"
 
 stories:
+  - story: greet
+    steps:
+      - intent: greet
+      - action: utter_greet
+
   - story: bot challenge happy 1
     steps:
       - intent: bot_challenge
       - action: utter_iam_bot
+
+  # TODO: Finish this
+  - story: add a goal happy 1
+    steps:
+      - intent: new_goal
+      - action: new_goal_form
+      - active_loop: new_goal_form
+      # - slot_was_set:
+      #     - time: "any"
+      # - active_loop: null
+      # - slot_was_set:
+      #     - requested_slot: null
+      # - action: action_save_goal
 
   - story: user asks how to improve mood
     steps:
@@ -18,8 +36,6 @@ stories:
 
   - story: mood happy 1
     steps:
-      - intent: greet
-      - action: utter_greet
       - intent: feeling
       - slot_was_set:
           - sentiment: 0.7
@@ -31,6 +47,11 @@ stories:
       - slot_was_set:
           - requested_slot: null
       - action: action_save_mood
+
+  - story: asking for motivational quote
+    steps:
+      - intent: motivational_quote
+      - action: action_grab_quote
 
   # - story: user is unhappy
   #   steps:
