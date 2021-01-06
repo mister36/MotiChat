@@ -1,19 +1,20 @@
 import logging
 import uuid
+import json
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional, Text
 
 from rasa.core.channels.channel import InputChannel, OutputChannel, UserMessage
 import rasa.shared.utils.io
 from sanic import Blueprint, response
 from sanic.request import Request
-from sanic.response import HTTPResponse
 from socketio import AsyncServer
 # WebSocket
 from sanic import Sanic
 from sanic import websocket
-from sanic.response import json
 from sanic.websocket import WebSocketProtocol
 from sanic.websocket import WebSocketConnection
+# mongodb
+from motor.motor_asyncio import AsyncIOMotorClient
 
 logger = logging.getLogger(__name__)
 
@@ -181,9 +182,14 @@ class WebSocketInput(InputChannel):
         # socketio_webhook = SocketBlueprint(
         #     sio, self.socketio_path, "socketio_webhook", __name__
         # )
-
-        # # make sio object static to use in get_output_channel
-        # self.sio = sio
+        
+        # Connects to MongoDB where session ids are stores
+        
+        
+        @ws_server_webhook.listener('before_server_start')
+        async def setup_db(app, loop):
+            app.db = AsyncIOMotorClient("mongodb+srv://motiapp:TXG2VoXeoa9kbSAo@moti1.piqgh.mongodb.net/motiSessionDB?retryWrites=true&w=majority")
+            app.sessionIDs = app.db['motiSessionDB']['sessionIDs']       
         
         @ws_server_webhook.websocket('/')
         async def health(_: Request, ws: WebSocketConnection) -> None:
@@ -195,9 +201,27 @@ class WebSocketInput(InputChannel):
         @ws_server_webhook.websocket('/websocket')
         async def testing(request, ws: WebSocketConnection):
             while True:
-                logger.debug("Wow look at that")
-                await ws.send("Hello from Rasa Websocket 1.0")
-
+                # logger.debug("Wow look at that")
+                await ws.send(json.dumps({"event": "connection"}))
+                # data from client
+                data = json.loads((await ws.recv()))
+                logger.debug(data['event'])
+                # event handler
+                if data['event'] == "session_request":
+                    id = data['data']['message']
+                    # figure out whether id is in database, if not add it
+                    db_id = await request.app.sessionIDs.find_one({"session": id})
+                    if (db_id):
+                        logger.debug(db_id)
+                    else:
+                        new_id = await request.app.sessionIDs.insert_one({"session": id})
+                        logger.debug(f"created {new_id}")
+                    await ws.send(json.dumps({"event": "session_accepted"}))
+                    # TODO: Determine if this is needed
+                    await ws.recv()
+                else:
+                    await ws.send("No handler for event")
+                    await ws.recv()
         # @sio.on("connect", namespace=self.namespace)
         # async def connect(sid: Text, _) -> None:
         #     logger.debug(f"User {sid} connected to socketIO endpoint.")
