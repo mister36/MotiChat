@@ -1,9 +1,8 @@
 import logging
-import uuid
 import json
 from typing import Any, Awaitable, Callable, Dict, Iterable, List, Optional, Text
 
-from rasa.core.channels.channel import InputChannel, OutputChannel, UserMessage
+from rasa.core.channels.channel import InputChannel, OutputChannel, UserMessage, CollectingOutputChannel
 import rasa.shared.utils.io
 from sanic import Blueprint, response
 from sanic.request import Request
@@ -30,94 +29,127 @@ logger = logging.getLogger(__name__)
 #         self.sio.attach(app, self.socketio_path)
 #         super().register(app, options)
 
+# async def handler(request, ws: WebSocketConnection):
+#     while True:
+#         # logger.debug("Wow look at that")
+#         await ws.send(json.dumps({"event": "connection"}))
+#         # data from client
+#         data = json.loads((await ws.recv()))
+#         logger.debug(data['event'])
 
-class SocketIOOutput(OutputChannel):
-    @classmethod
-    def name(cls) -> Text:
-        return "socketio"
+#         event = data['event']
+#         message = data['data']['message']
+#         # session_request event handler
+#         if event == "session_request":
+#             id = message
+#             # figure out whether id is in database, if not add it
+#             db_id = await request.app.sessionIDs.find_one({"session": id})
+#             if (db_id):
+#                 logger.debug(db_id)
+#             else:
+#                 new_id = await request.app.sessionIDs.insert_one({"session": id})
+#                 logger.debug(f"created {new_id}")
+#             await ws.send(json.dumps({"event": "session_accepted"}))
+#         # user_message event handler
+#         elif event == "user_message":
+#             await ws.send(json.dumps({"event": "bot_message", "data": {
+#                 "text": "Received message👍"
+#             }}))
+#         else:
+#             await ws.send("No handler for event")
 
-    def __init__(self, sio: AsyncServer, bot_message_evt: Text) -> None:
-        self.sio = sio
-        self.bot_message_evt = bot_message_evt
+clients = {}
 
-    async def _send_message(self, socket_id: Text, response: Any) -> None:
-        """Sends a message to the recipient using the bot event."""
 
-        await self.sio.emit(self.bot_message_evt, response, room=socket_id)
+# class WebSocketOutput(OutputChannel):
+#     @classmethod
+#     def name(cls) -> Text:
+#         return "websocket"
 
-    async def send_text_message(
-        self, recipient_id: Text, text: Text, **kwargs: Any
-    ) -> None:
-        """Send a message through this channel."""
+#     def __init__(self, ws_id) -> None:
+#         self.ws_id = ws_id
+#         self.ws = clients[ws_id]
 
-        for message_part in text.strip().split("\n\n"):
-            await self._send_message(recipient_id, {"text": message_part})
+#     async def _send_message(self, ws_id: Text, response: Any) -> None:
+#         """Sends a message to the recipient using the bot event."""
+#         logger.debug(f"sending to {ws_id}: {response}")
+#         await self.ws.send(json.dumps({"event": "bot_message", "data": response}))
 
-    async def send_image_url(
-        self, recipient_id: Text, image: Text, **kwargs: Any
-    ) -> None:
-        """Sends an image to the output"""
+#     async def send_text_message(
+#         self, recipient_id: Text, text: Text, **kwargs: Any
+#     ) -> None:
+#         """Send a message through this channel."""
 
-        message = {"attachment": {"type": "image", "payload": {"src": image}}}
-        await self._send_message(recipient_id, message)
+#         for message_part in text.strip().split("\n\n"):
+#             await self._send_message(recipient_id, {"text": message_part})
 
-    async def send_text_with_buttons(
-        self,
-        recipient_id: Text,
-        text: Text,
-        buttons: List[Dict[Text, Any]],
-        **kwargs: Any,
-    ) -> None:
-        """Sends buttons to the output."""
+#     async def send_image_url(
+#         self, recipient_id: Text, image: Text, **kwargs: Any
+#     ) -> None:
+#         """Sends an image to the output"""
 
-        # split text and create a message for each text fragment
-        # the `or` makes sure there is at least one message we can attach the quick
-        # replies to
-        message_parts = text.strip().split("\n\n") or [text]
-        messages = [{"text": message, "quick_replies": []} for message in message_parts]
+#         message = {"image": image}
+#         await self._send_message(recipient_id, message)
 
-        # attach all buttons to the last text fragment
-        for button in buttons:
-            messages[-1]["quick_replies"].append(
-                {
-                    "content_type": "text",
-                    "title": button["title"],
-                    "payload": button["payload"],
-                }
-            )
+# TODO: Implement
+# async def send_text_with_buttons(
+#     self,
+#     recipient_id: Text,
+#     text: Text,
+#     buttons: List[Dict[Text, Any]],
+#     **kwargs: Any,
+# ) -> None:
+#     """Sends buttons to the output."""
 
-        for message in messages:
-            await self._send_message(recipient_id, message)
+#     # split text and create a message for each text fragment
+#     # the `or` makes sure there is at least one message we can attach the quick
+#     # replies to
+#     message_parts = text.strip().split("\n\n") or [text]
+#     messages = [{"text": message, "quick_replies": []}
+#                 for message in message_parts]
 
-    async def send_elements(
-        self, recipient_id: Text, elements: Iterable[Dict[Text, Any]], **kwargs: Any
-    ) -> None:
-        """Sends elements to the output."""
+#     # attach all buttons to the last text fragment
+#     for button in buttons:
+#         messages[-1]["quick_replies"].append(
+#             {
+#                 "content_type": "text",
+#                 "title": button["title"],
+#                 "payload": button["payload"],
+#             }
+#         )
 
-        for element in elements:
-            message = {
-                "attachment": {
-                    "type": "template",
-                    "payload": {"template_type": "generic", "elements": element},
-                }
-            }
+#     for message in messages:
+#         await self._send_message(recipient_id, message)
 
-            await self._send_message(recipient_id, message)
+# async def send_elements(
+#     self, recipient_id: Text, elements: Iterable[Dict[Text, Any]], **kwargs: Any
+# ) -> None:
+#     """Sends elements to the output."""
 
-    async def send_custom_json(
-        self, recipient_id: Text, json_message: Dict[Text, Any], **kwargs: Any
-    ) -> None:
-        """Sends custom json to the output"""
+#     for element in elements:
+#         message = {
+#             "attachment": {
+#                 "type": "template",
+#                 "payload": {"template_type": "generic", "elements": element},
+#             }
+#         }
 
-        json_message.setdefault("room", recipient_id)
+#         await self._send_message(recipient_id, message)
 
-        await self.sio.emit(self.bot_message_evt, **json_message)
+# async def send_custom_json(
+#     self, recipient_id: Text, json_message: Dict[Text, Any], **kwargs: Any
+# ) -> None:
+#     """Sends custom json to the output"""
 
-    async def send_attachment(
-        self, recipient_id: Text, attachment: Dict[Text, Any], **kwargs: Any
-    ) -> None:
-        """Sends an attachment to the user."""
-        await self._send_message(recipient_id, {"attachment": attachment})
+#     json_message.setdefault("room", recipient_id)
+
+#     await self.sio.emit(self.bot_message_evt, **json_message)
+
+# async def send_attachment(
+#     self, recipient_id: Text, attachment: Dict[Text, Any], **kwargs: Any
+# ) -> None:
+#     """Sends an attachment to the user."""
+#     await self._send_message(recipient_id, {"attachment": attachment})
 
 
 class WebSocketInput(InputChannel):
@@ -147,7 +179,7 @@ class WebSocketInput(InputChannel):
         # socketio_path: Optional[Text] = "/socket.io",
     ):
         self.ws_server = None
-        self.sender_id="test_sender_id"
+        self.sender_id = "test_sender_id"
         # self.bot_message_evt = bot_message_evt
         # self.session_persistence = session_persistence
         # self.user_message_evt = user_message_evt
@@ -170,98 +202,65 @@ class WebSocketInput(InputChannel):
     def blueprint(
         self, on_new_message: Callable[[UserMessage], Awaitable[Any]]
     ) -> Blueprint:
-        
-        # ws_server = Sanic('moti')
-        
         ws_server_webhook = Blueprint("websocket_webhook")
-        # Workaround so that socketio works with requests from other origins.
-        # https://github.com/miguelgrinberg/python-socketio/issues/205#issuecomment-493769183
-        
-        
+
         # sio = AsyncServer(async_mode="sanic", cors_allowed_origins=[])
         # socketio_webhook = SocketBlueprint(
         #     sio, self.socketio_path, "socketio_webhook", __name__
         # )
-        
-        # Connects to MongoDB where session ids are stores
-        
-        
+
         @ws_server_webhook.listener('before_server_start')
         async def setup_db(app, loop):
-            app.db = AsyncIOMotorClient("mongodb+srv://motiapp:TXG2VoXeoa9kbSAo@moti1.piqgh.mongodb.net/motiSessionDB?retryWrites=true&w=majority")
-            app.sessionIDs = app.db['motiSessionDB']['sessionIDs']       
-        
+            # Connects to MongoDB where session ids are stores
+            app.db = AsyncIOMotorClient(
+                "mongodb+srv://motiapp:TXG2VoXeoa9kbSAo@moti1.piqgh.mongodb.net/motiSessionDB?retryWrites=true&w=majority")
+            app.sessionIDs = app.db['motiSessionDB']['sessionIDs']
+
         @ws_server_webhook.websocket('/')
         async def health(_: Request, ws: WebSocketConnection) -> None:
             while True:
                 logger.debug("HEALTH RUNNING")
                 await ws.send("Health is good from rasa")
                 return "HEALTH GOOD FROM RASA"
-        
+
         @ws_server_webhook.websocket('/websocket')
-        async def testing(request, ws: WebSocketConnection):
+        async def handle_message(request, ws: WebSocketConnection):
             while True:
-                # logger.debug("Wow look at that")
                 await ws.send(json.dumps({"event": "connection"}))
+                # initialize
+                id = None
+                output_channel = None
                 # data from client
                 data = json.loads((await ws.recv()))
-                logger.debug(data['event'])
-                # event handler
-                if data['event'] == "session_request":
-                    id = data['data']['message']
+
+                event = data['event']
+                id = data['data']['client_id']
+                # session_request event handler
+                if event == "session_request":
                     # figure out whether id is in database, if not add it
                     db_id = await request.app.sessionIDs.find_one({"session": id})
-                    if (db_id):
-                        logger.debug(db_id)
-                    else:
-                        new_id = await request.app.sessionIDs.insert_one({"session": id})
-                        logger.debug(f"created {new_id}")
+                    if not db_id:
+                        await request.app.sessionIDs.insert_one({"session": id})
+
+                    # adds websocket connection to dictionary
+                    clients[id] = ws
+                    logger.debug(f"clients dict: {clients}")
+                    # creates output channel for websocket connection
+                    output_channel = WebSocketOutput(id)
                     await ws.send(json.dumps({"event": "session_accepted"}))
-                    # TODO: Determine if this is needed
-                    await ws.recv()
-                else:
-                    await ws.send("No handler for event")
-                    await ws.recv()
-        # @sio.on("connect", namespace=self.namespace)
-        # async def connect(sid: Text, _) -> None:
-        #     logger.debug(f"User {sid} connected to socketIO endpoint.")
 
-        # @sio.on("disconnect", namespace=self.namespace)
-        # async def disconnect(sid: Text) -> None:
-        #     logger.debug(f"User {sid} disconnected from socketIO endpoint.")
+                elif event == "user_message":
+                    message = data['data']['message']
+                    # creates and sends message for rasa to handle
+                    output = CollectingOutputChannel()
 
-        # @sio.on("session_request", namespace=self.namespace)
-        # async def session_request(sid: Text, data: Optional[Dict]):
-        #     if data is None:
-        #         data = {}
-        #     if "session_id" not in data or data["session_id"] is None:
-        #         data["session_id"] = uuid.uuid4().hex
-        #     if self.session_persistence:
-        #         sio.enter_room(sid, data["session_id"])
-        #     await sio.emit("session_confirm", data["session_id"], room=sid)
-        #     logger.debug(f"User {sid} connected to socketIO endpoint.")
-
-        # @sio.on(self.user_message_evt, namespace=self.namespace)
-        # async def handle_message(sid: Text, data: Dict) -> Any:
-        #     output_channel = SocketIOOutput(sio, self.bot_message_evt)
-
-            # if self.session_persistence:
-            #     if not data.get("session_id"):
-            #         rasa.shared.utils.io.raise_warning(
-            #             "A message without a valid session_id "
-            #             "was received. This message will be "
-            #             "ignored. Make sure to set a proper "
-            #             "session id using the "
-            #             "`session_request` socketIO event."
-            #         )
-            #         return
-            #     sender_id = data["session_id"]
-            # else:
-            #     sender_id = sid
-
-            message = UserMessage(
-                "Wassup", None, self.sender_id, input_channel=self.name()
-            )
-            await on_new_message(message)
+                    user_message = UserMessage(
+                        message, output, id, input_channel=self.name()
+                    )
+                    await on_new_message(user_message)
+                    logger.debug(output.messages)
+                    # TODO: Check whether messages contain text or images
+                    await ws.send(json.dumps(
+                        {"event": "bot_message", "data": {"text": output.messages[-1]['text']}}))
 
         return ws_server_webhook
