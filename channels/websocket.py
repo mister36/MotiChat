@@ -61,35 +61,37 @@ logger = logging.getLogger(__name__)
 clients = {}
 
 
-# class WebSocketOutput(OutputChannel):
-#     @classmethod
-#     def name(cls) -> Text:
-#         return "websocket"
+class WebSocketOutput(OutputChannel):
+    @classmethod
+    def name(cls) -> Text:
+        return "websocket"
 
-#     def __init__(self, ws_id) -> None:
-#         self.ws_id = ws_id
-#         self.ws = clients[ws_id]
+    def __init__(self, ws_id) -> None:
+        self.ws_id = ws_id
+        self.ws = clients[ws_id]
 
-#     async def _send_message(self, ws_id: Text, response: Any) -> None:
-#         """Sends a message to the recipient using the bot event."""
-#         logger.debug(f"sending to {ws_id}: {response}")
-#         await self.ws.send(json.dumps({"event": "bot_message", "data": response}))
+    async def _send_message(self, ws_id: Text, response: Any) -> None:
+        """Sends a message to the recipient using the bot event."""
+        await self.ws.send(json.dumps({"event": "bot_message", "data": response}))
+        # await self.ws.send(json.dumps({"event": "bot_message", "data": response}))
 
-#     async def send_text_message(
-#         self, recipient_id: Text, text: Text, **kwargs: Any
-#     ) -> None:
-#         """Send a message through this channel."""
+    async def send_text_message(
+        self, recipient_id: Text, text: Text, **kwargs: Any
+    ) -> None:
+        """Send a message through this channel."""
 
-#         for message_part in text.strip().split("\n\n"):
-#             await self._send_message(recipient_id, {"text": message_part})
+        for message_part in text.strip().split("\n\n"):
+            await self._send_message(recipient_id, {"text": message_part})
 
-#     async def send_image_url(
-#         self, recipient_id: Text, image: Text, **kwargs: Any
-#     ) -> None:
-#         """Sends an image to the output"""
+    async def send_image_url(
+        self, recipient_id: Text, image: Text, **kwargs: Any
+    ) -> None:
+        """Sends an image to the output"""
 
-#         message = {"image": image}
-#         await self._send_message(recipient_id, message)
+        message = {"image": image}
+        await self._send_message(recipient_id, message)
+
+        # TODO: CHECK IF IT'S REALLY ON_NEW_MESSAGE OR WEBSOCKET
 
 # TODO: Implement
 # async def send_text_with_buttons(
@@ -227,9 +229,6 @@ class WebSocketInput(InputChannel):
         async def handle_message(request, ws: WebSocketConnection):
             while True:
                 await ws.send(json.dumps({"event": "connection"}))
-                # initialize
-                id = None
-                output_channel = None
                 # data from client
                 data = json.loads((await ws.recv()))
 
@@ -246,21 +245,23 @@ class WebSocketInput(InputChannel):
                     clients[id] = ws
                     logger.debug(f"clients dict: {clients}")
                     # creates output channel for websocket connection
-                    output_channel = WebSocketOutput(id)
                     await ws.send(json.dumps({"event": "session_accepted"}))
 
                 elif event == "user_message":
                     message = data['data']['message']
                     # creates and sends message for rasa to handle
-                    output = CollectingOutputChannel()
+                    # output = CollectingOutputChannel()
+                    output = WebSocketOutput(id)
 
                     user_message = UserMessage(
                         message, output, id, input_channel=self.name()
                     )
                     await on_new_message(user_message)
-                    logger.debug(output.messages)
+
                     # TODO: Check whether messages contain text or images
-                    await ws.send(json.dumps(
-                        {"event": "bot_message", "data": {"text": output.messages[-1]['text']}}))
+                    # await self.ws.send(json.dumps({"event": "bot_message", "data": {"text": "Fuck yeah"}}))
+
+                    # await ws.send(json.dumps(
+                    #     {"event": "bot_message", "data": {"text": output.messages[-1]['text']}}))
 
         return ws_server_webhook
