@@ -4,18 +4,18 @@ rules:
   - rule: Listen after "user_name" and "user_email" are set
     # TODO: Add "conversaton_start" after testing is done
     steps:
-      - intent: set_info
+      - intent: EXTERNAL_set_info
       - slot_was_set:
           - user_name: "name"
       - slot_was_set:
           - user_email: "email"
       - action: action_listen
 
-  - rule: Whenever 'new_user' intent, create mission
+  - rule: Whenever 'EXTERNAL_new_user' intent, create mission
     # TODO: Add "conversaton_start" after testing is done
     # conversation_start: true
     steps:
-      - intent: new_user
+      - intent: EXTERNAL_new_user
       - action: action_new_user_mission
       #   New mission form
       - action: new_mission_form

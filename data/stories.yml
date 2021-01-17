@@ -11,18 +11,11 @@ stories:
       - intent: bot_challenge
       - action: utter_iam_bot
 
-  # TODO: Finish this
   - story: add a goal happy 1
     steps:
       - intent: new_goal
       - action: new_goal_form
       - active_loop: new_goal_form
-      # - slot_was_set:
-      #     - time: "any"
-      # - active_loop: null
-      # - slot_was_set:
-      #     - requested_slot: null
-      # - action: action_save_goal
 
   - story: user asks how to improve mood
     steps:

@@ -11,7 +11,7 @@
 # https://rasa.com/docs/rasa/custom-actions
 
 action_endpoint:
-  url: "http://localhost:4000/api/v1/chatbot/webhook"
+  url: "http://192.168.1.72:4001/api/v1/chatbot/webhook"
 # Tracker store which is used to store the conversations.
 # By default the conversations are stored in memory.
 # https://rasa.com/docs/rasa/tracker-stores
@@ -23,7 +23,6 @@ action_endpoint:
 #    db: <number of your database within redis, e.g. 0>
 #    password: <password used for authentication>
 #    use_ssl: <whether or not the communication is encrypted, default false>
-
 tracker_store:
   type: mongod
   url: mongodb+srv://motiapp:<password>@moti1.piqgh.mongodb.net/<dbname>?retryWrites=true&w=majority
@@ -33,8 +32,17 @@ tracker_store:
 # Event broker which all conversation events should be streamed to.
 # https://rasa.com/docs/rasa/event-brokers
 
-#event_broker:
-#  url: localhost
-#  username: username
-#  password: password
-#  queue: queue
+# tracker_store:
+#   type: tracker.mongo_db.MongoAsyncTrackerStore
+#   url: mongodb+srv://motiapp:<password>@moti1.piqgh.mongodb.net/<dbname>?retryWrites=true&w=majority
+#   db: chatbotDB
+#   username: motiapp
+#   password: TXG2VoXeoa9kbSAo
+
+event_broker:
+  type: pika
+  url: "127.0.0.1"
+  username: user
+  password: password
+  queues:
+    - test_queue

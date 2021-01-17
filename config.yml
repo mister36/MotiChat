@@ -1,6 +1,7 @@
 # Configuration for Rasa NLU.
 # https://rasa.com/docs/rasa/nlu/components/
 # Running: rasa run --connector socketio --cors "*"
+# source ./venv/bin/activate
 language: en
 
 pipeline:

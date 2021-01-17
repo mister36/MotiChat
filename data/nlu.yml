@@ -1,29 +1,29 @@
 version: "2.0"
 
 nlu:
-  - regex: new_user
-    examples: |
-      - ^wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt$
+  # - regex: EXTERNAL_new_user
+  #   examples: |
+  #     - ^wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt$
 
-  - regex: set_info
-    examples: |
-      - ^P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS$
-
-  # NOTE: Only called by MotiAPI
-  - intent: new_user
-    examples: |
-      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
-      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
-      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
-      - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+  # - regex: EXTERNAL_set_info
+  #   examples: |
+  #     - ^P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS$
 
   # NOTE: Only called by MotiAPI
-  - intent: set_info
-    examples: |
-      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
-      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
-      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
-      - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+  # - intent: EXTERNAL_new_user
+  # examples: |
+  #   - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+  #   - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+  #   - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+  #   - wyVuQxncOyOLYPfSkpcatp0Sc08uoZShLHWbE6Jt
+
+  # NOTE: Only called by MotiAPI
+  # - intent: EXTERNAL_set_info
+  # examples: |
+  #   - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+  #   - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+  #   - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
+  #   - P5lsdkISTZDbBhTrDCcTDbqATCZvxWBS2EMnzqDS
 
   - intent: greet
     examples: |

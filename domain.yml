@@ -12,8 +12,8 @@ intents:
   - motivational_quote
   - inform
   - future
-  - set_info
-  - new_user
+  - EXTERNAL_set_info
+  - EXTERNAL_new_user
   - feeling
   - improve_mood
   - new_goal
