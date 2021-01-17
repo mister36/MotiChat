@@ -75,9 +75,6 @@ class WebSocketClient():
                 break
 
 
-clients = {}
-
-
 class WebSocketOutput(OutputChannel):
     @classmethod
     def name(cls) -> Text:
@@ -181,45 +178,10 @@ class WebSocketInput(InputChannel):
     def name(cls) -> Text:
         return "websockets"
 
-    # @classmethod
-    # def from_credentials(cls, credentials: Optional[Dict[Text, Any]]) -> InputChannel:
-    #     credentials = credentials or {}
-    #     return cls(
-    #         credentials.get("user_message_evt", "user_uttered"),
-    #         credentials.get("bot_message_evt", "bot_uttered"),
-    #         credentials.get("namespace"),
-    #         credentials.get("session_persistence", False),
-    #         credentials.get("socketio_path", "/socket.io"),
-    #     )
-
     def __init__(
         self,
-        # user_message_evt: Text = "user_uttered",
-        # bot_message_evt: Text = "bot_uttered",
-        # namespace: Optional[Text] = None,
-        # session_persistence: bool = False,
-        # socketio_path: Optional[Text] = "/socket.io",
     ):
-        self.ws_server = None
-        self.sender_id = "test_sender_id"
-        # self.bot_message_evt = bot_message_evt
-        # self.session_persistence = session_persistence
-        # self.user_message_evt = user_message_evt
-        # self.namespace = namespace
-        # self.socketio_path = socketio_path
-        # self.sio = None
-
-    # def get_output_channel(self) -> Optional["OutputChannel"]:
-    #     if self.sio is None:
-    #         rasa.shared.utils.io.raise_warning(
-    #             "SocketIO output channel cannot be recreated. "
-    #             "This is expected behavior when using multiple Sanic "
-    #             "workers or multiple Rasa Open Source instances. "
-    #             "Please use a different channel for external events in these "
-    #             "scenarios."
-    #         )
-    #         return
-    #     return SocketIOOutput(self.sio, self.bot_message_evt)
+        pass
 
     def blueprint(
         self, on_new_message: Callable[[UserMessage], Awaitable[Any]]
@@ -261,40 +223,41 @@ class WebSocketInput(InputChannel):
 
         @ws_server_webhook.websocket('/websocket')
         async def handle_message(request, ws):
-            while True:
-                # sends connect event
-                connect_json = json.dumps({"event": "connection"})
-                await ws.send(connect_json)
-                # data from client
-                data = json.loads((await ws.recv()))
-                logger.debug(f"DATA: {data}")
+            print('hi')
+            # while True:
+            #     # sends connect event
+            #     connect_json = json.dumps({"event": "connection"})
+            #     await ws.send(connect_json)
+            #     # data from client
+            #     data = json.loads((await ws.recv()))
+            #     logger.debug(f"DATA: {data}")
 
-                event = data['event']
-                id = data['data']['client_id']
-                # session_request event handler
-                if event == "session_request":
-                    # figure out whether id is in database, if not add it
-                    db_id = await request.app.sessionIDs.find_one({"session": id})
-                    if not db_id:
-                        await request.app.sessionIDs.insert_one({"session": id})
+            #     event = data['event']
+            #     id = data['data']['client_id']
+            #     # session_request event handler
+            #     if event == "session_request":
+            #         # figure out whether id is in database, if not add it
+            #         db_id = await request.app.sessionIDs.find_one({"session": id})
+            #         if not db_id:
+            #             await request.app.sessionIDs.insert_one({"session": id})
 
-                    # adds websocket connection to dictionary
-                    clients[id] = ws
-                    logger.debug(f"clients dict: {clients}")
+            #         # adds websocket connection to dictionary
+            #         clients[id] = ws
+            #         logger.debug(f"clients dict: {clients}")
 
-                    # responds that the session is accepted
-                    await ws.send(json.dumps({"event": "session_accepted"}))
+            #         # responds that the session is accepted
+            #         await ws.send(json.dumps({"event": "session_accepted"}))
 
-                elif event == "user_message":
-                    message = data['data']['message']
-                    # creates and sends message for rasa to handle
-                    # output = CollectingOutputChannel()
-                    output = WebSocketOutput('hello@gmail.com', id)
+            #     elif event == "user_message":
+            #         message = data['data']['message']
+            #         # creates and sends message for rasa to handle
+            #         # output = CollectingOutputChannel()
+            #         output = WebSocketOutput('hello@gmail.com', id)
 
-                    user_message = UserMessage(
-                        message, output, id, input_channel=self.name()
-                    )
-                    await on_new_message(user_message)
+            #         user_message = UserMessage(
+            #             message, output, id, input_channel=self.name()
+            #         )
+            #         await on_new_message(user_message)
 
     # TODO: Check whether messages contain text or images
     # await self.ws.send(json.dumps({"event": "bot_message", "data": {"text": "Fuck yeah"}}))
