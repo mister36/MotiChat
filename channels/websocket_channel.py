@@ -26,11 +26,15 @@ class WebSocketClient():
 
             websockets.client.connect returns a WebSocketClientProtocol, which is used to send and receive messages
         '''
-        self.connection = await websockets.client.connect('ws://192.168.1.72:4000/chat')
-        if self.connection.open:
-            # Send greeting
-            await self.sendMessage(json.dumps({"event": "rasa_sub"}))
-            return self.connection
+        try:
+            self.connection = await websockets.client.connect('ws://192.168.1.72:4000/chat')
+            if self.connection.open:
+                # Ask to subscribe to messages
+                await self.sendMessage(json.dumps({"event": "rasa_sub"}))
+                return self.connection
+        except ConnectionRefusedError:
+            await asyncio.sleep(5)
+            await self.connect()
 
     async def sendMessage(self, message):
         '''
@@ -47,32 +51,34 @@ class WebSocketClient():
                 message = await self.connection.recv()
                 message = json.loads(str(message))
 
-                id = message['data']['client_id']
-                text = message['data']['message']
-                email = message['data']['email']
+                if message['event'] == 'user_message':
+                    id = message['data']['client_id']
+                    text = message['data']['message']
+                    email = message['data']['email']
 
-                output = WebSocketOutput(self.connection, email)
-                user_message = UserMessage(
-                    text, output, id, input_channel="websockets"
-                )
-                await self.on_new_message(user_message)
+                    output = WebSocketOutput(self.connection, email)
+                    user_message = UserMessage(
+                        text, output, id, input_channel="websockets"
+                    )
+                    await self.on_new_message(user_message)
             except websockets.exceptions.ConnectionClosed:
                 print('Websocket closed. Opening again...')
                 await self.connect()
-                break
+                # break
 
     async def heartbeat(self):
         '''
-        Sending heartbeat to server every 30 seconds
+        Sending heartbeat to server every 5 seconds
         Ping - pong messages to verify connection is alive
         '''
         while True:
             try:
                 await self.sendMessage(json.dumps({"event": "ping"}))
-                await asyncio.sleep(30)
+                await asyncio.sleep(5)
             except websockets.exceptions.ConnectionClosed:
-                print('Connection with server closed')
-                break
+                print('Websocket closed. Opening again...')
+                await self.connect()
+                # break
 
 
 class WebSocketOutput(OutputChannel):
@@ -83,12 +89,10 @@ class WebSocketOutput(OutputChannel):
     def __init__(self, connection, email) -> None:
         self.connection = connection
         self.email = email
-        # self.ws = clients[ws_id]
 
     async def _send_message(self, ws_id: Text, response: Any) -> None:
         """Sends a message to the recipient using the bot event."""
-        await self.connection.send(json.dumps({"event": "bot_message", "data": response}))
-        # await self.ws.send(json.dumps({"event": "bot_message", "data": response}))
+        await self.connection.send(json.dumps({"event": "bot_message", "email": self.email, "data": response}))
 
     async def send_text_message(
         self, recipient_id: Text, text: Text, **kwargs: Any
@@ -96,79 +100,72 @@ class WebSocketOutput(OutputChannel):
         """Send a message through this channel."""
 
         for message_part in text.strip().split("\n\n"):
-            await self._send_message(recipient_id, {"text": message_part, "email": self.email})
+            await self._send_message(recipient_id, {"text": message_part})
 
     async def send_image_url(
         self, recipient_id: Text, image: Text, **kwargs: Any
     ) -> None:
         """Sends an image to the output"""
 
-        message = {"image": image, "email": self.email}
+        message = {"image": image}
         await self._send_message(recipient_id, message)
 
-        # TODO: CHECK IF IT'S REALLY ON_NEW_MESSAGE OR WEBSOCKET
+    async def send_text_with_buttons(
+        self,
+        recipient_id: Text,
+        text: Text,
+        buttons: List[Dict[Text, Any]],
+        **kwargs: Any,
+    ) -> None:
+        """Sends buttons to the output."""
 
-# TODO: Implement
+        # split text and create a message for each text fragment
+        # the `or` makes sure there is at least one message we can attach the quick
+        # replies to
+        message_parts = text.strip().split("\n\n") or [text]
+        messages = [{"text": message, "quick_replies": []}
+                    for message in message_parts]
 
+        # attach all buttons to the last text fragment
+        for button in buttons:
+            messages[-1]["quick_replies"].append(
+                {
+                    "content_type": "text",
+                    "title": button["title"],
+                    "payload": button["payload"],
+                }
+            )
 
-# async def send_text_with_buttons(
-#     self,
-#     recipient_id: Text,
-#     text: Text,
-#     buttons: List[Dict[Text, Any]],
-#     **kwargs: Any,
-# ) -> None:
-#     """Sends buttons to the output."""
+        for message in messages:
+            await self._send_message(recipient_id, message)
 
-#     # split text and create a message for each text fragment
-#     # the `or` makes sure there is at least one message we can attach the quick
-#     # replies to
-#     message_parts = text.strip().split("\n\n") or [text]
-#     messages = [{"text": message, "quick_replies": []}
-#                 for message in message_parts]
+    async def send_custom_json(
+        self, recipient_id: Text, json_message: Dict[Text, Any], **kwargs: Any
+    ) -> None:
+        """Sends custom json to the output"""
 
-#     # attach all buttons to the last text fragment
-#     for button in buttons:
-#         messages[-1]["quick_replies"].append(
-#             {
-#                 "content_type": "text",
-#                 "title": button["title"],
-#                 "payload": button["payload"],
-#             }
-#         )
+        await self._send_message(recipient_id, json_message)
 
-#     for message in messages:
-#         await self._send_message(recipient_id, message)
+    async def send_elements(
+        self, recipient_id: Text, elements: Iterable[Dict[Text, Any]], **kwargs: Any
+    ) -> None:
+        """Sends elements to the output."""
 
-# async def send_elements(
-#     self, recipient_id: Text, elements: Iterable[Dict[Text, Any]], **kwargs: Any
-# ) -> None:
-#     """Sends elements to the output."""
+        for element in elements:
+            message = {
+                "attachment": {
+                    "type": "template",
+                    "payload": {"template_type": "generic", "elements": element},
+                }
+            }
 
-#     for element in elements:
-#         message = {
-#             "attachment": {
-#                 "type": "template",
-#                 "payload": {"template_type": "generic", "elements": element},
-#             }
-#         }
+            await self._send_message(recipient_id, message)
 
-#         await self._send_message(recipient_id, message)
-
-# async def send_custom_json(
-#     self, recipient_id: Text, json_message: Dict[Text, Any], **kwargs: Any
-# ) -> None:
-#     """Sends custom json to the output"""
-
-#     json_message.setdefault("room", recipient_id)
-
-#     await self.sio.emit(self.bot_message_evt, **json_message)
-
-# async def send_attachment(
-#     self, recipient_id: Text, attachment: Dict[Text, Any], **kwargs: Any
-# ) -> None:
-#     """Sends an attachment to the user."""
-#     await self._send_message(recipient_id, {"attachment": attachment})
+    async def send_attachment(
+        self, recipient_id: Text, attachment: Dict[Text, Any], **kwargs: Any
+    ) -> None:
+        """Sends an attachment to the user."""
+        await self._send_message(recipient_id, {"attachment": attachment})
 
 
 class WebSocketInput(InputChannel):
@@ -188,25 +185,17 @@ class WebSocketInput(InputChannel):
     ) -> Blueprint:
         ws_server_webhook = Blueprint("websocket_webhook")
 
-        # sio = AsyncServer(async_mode="sanic", cors_allowed_origins=[])
-        # socketio_webhook = SocketBlueprint(
-        #     sio, self.socketio_path, "socketio_webhook", __name__
-        # )
-
         @ws_server_webhook.listener('after_server_start')
         async def setup_db(app, loop):
             # Connects to MongoDB where session ids are stores
-            app.db = AsyncIOMotorClient(
-                "mongodb+srv://motiapp:TXG2VoXeoa9kbSAo@moti1.piqgh.mongodb.net/motiSessionDB?retryWrites=true&w=majority")
-            app.sessionIDs = app.db['motiSessionDB']['sessionIDs']
-            # websocket
-            # app.ws = await websockets.connect('ws://192.168.1.72:4000/rasa')
+            # app.db = AsyncIOMotorClient(
+            #     "mongodb+srv://motiapp:TXG2VoXeoa9kbSAo@moti1.piqgh.mongodb.net/motiSessionDB?retryWrites=true&w=majority")
+            # app.sessionIDs = app.db['motiSessionDB']['sessionIDs']
+
             app.ws = WebSocketClient(on_new_message)
             # Start connection and get client connection protocol
-            # connection = loop.run_until_complete(app.ws.connect())
             await asyncio.gather(app.ws.connect())
             # Start listener and heartbeat
-            # await asyncio.gather(app.ws.heartbeat(), app.ws.receiveMessage())
             heart_task = asyncio.create_task(app.ws.heartbeat())
             message_task = asyncio.create_task(
                 app.ws.receiveMessage())

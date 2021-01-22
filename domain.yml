@@ -1,5 +1,4 @@
 version: "2.0"
-# If this doesn't work, reset the time slot again
 
 intents:
   - greet
@@ -21,6 +20,7 @@ intents:
 entities:
   - mission
   - time
+  - word_time
   - number
   - duration
   - user_name
@@ -34,10 +34,11 @@ forms:
   # and "auto_fill: false"
   new_mission_form:
     mission:
-      - type: from_text
+      - type: from_entity
+        entity: mission
     mission_end:
       - type: from_entity
-        entity: time
+        entity: word_time
 
   new_goal_form:
     goal:
@@ -100,7 +101,6 @@ slots:
     type: bool
     influence_conversation: false
     initial_value: false
-
   # SECTION: Sentiment
   sentiment:
     type: slots.sentimentSlot.SentimentScoreSlot
@@ -123,6 +123,12 @@ slots:
 
   # SECTION: Numbers
   time:
+    type: text
+    influence_conversation: true
+
+  # used when setting time slot directly from words
+  # e.g, /info{"word_time": "January 25"}
+  word_time:
     type: text
     influence_conversation: true
 
@@ -150,10 +156,14 @@ responses:
 
   # ANCHOR: New mission form
   utter_ask_new_mission_form_mission:
-    - text: "So, {user_name}, what is your mission? Be as specific as possible:"
+    - custom:
+        component: "mission_form"
 
-  utter_ask_new_mission_form_mission_end:
-    - text: "Great! When do you want to accomplish this?"
+  # utter_ask_new_mission_form_mission:
+  #   - text: "So, {user_name}, what is your mission? Be as specific as possible:"
+
+  # utter_ask_new_mission_form_mission_end:
+  #   - text: "Great! When do you want to accomplish this?"
 
   # ANCHOR: New goal form
   # utter_ask_new_goal_form_goal:
@@ -190,6 +200,7 @@ actions:
   - action_save_goal
   # time
   - action_get_time_from_text
+  - action_get_time_from_words
   - action_reset_time
   # form validation
   - validate_new_goal_form
