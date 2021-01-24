@@ -54,9 +54,8 @@ class WebSocketClient():
                 if message['event'] == 'user_message':
                     id = message['data']['client_id']
                     text = message['data']['message']
-                    email = message['data']['email']
 
-                    output = WebSocketOutput(self.connection, email)
+                    output = WebSocketOutput(self.connection)
                     user_message = UserMessage(
                         text, output, id, input_channel="websockets"
                     )
@@ -86,13 +85,12 @@ class WebSocketOutput(OutputChannel):
     def name(cls) -> Text:
         return "websocket"
 
-    def __init__(self, connection, email) -> None:
+    def __init__(self, connection) -> None:
         self.connection = connection
-        self.email = email
 
-    async def _send_message(self, ws_id: Text, response: Any) -> None:
+    async def _send_message(self, id: Text, response: Any) -> None:
         """Sends a message to the recipient using the bot event."""
-        await self.connection.send(json.dumps({"event": "bot_message", "email": self.email, "data": response}))
+        await self.connection.send(json.dumps({"event": "bot_message", "id": id, "data": response}))
 
     async def send_text_message(
         self, recipient_id: Text, text: Text, **kwargs: Any

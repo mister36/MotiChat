@@ -74,7 +74,7 @@ rules:
       - active_loop: new_goal_form
       #   will set the time slot
       - slot_was_set:
-          - time: "any"
+          - word_time: "any"
 
   - rule: submit "new_goal_form"
     condition:
@@ -82,10 +82,10 @@ rules:
     steps:
       #   will set the time slot
       - slot_was_set:
-          - time: "any"
+          - word_time: "any"
       - action: new_goal_form
       - active_loop: null
-      - action: action_get_time_from_text
+      - action: action_get_time_from_words
       - slot_was_set:
           - actual_time: "anything"
         #   save goal

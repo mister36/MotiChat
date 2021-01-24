@@ -18,15 +18,21 @@ intents:
   - new_goal
 
 entities:
+  # mission & goals
   - mission
+  - goal
+  - goal_type
+  # numbers
   - time
   - word_time
   - number
   - duration
+  # user info
   - user_name
   - user_email
   - user_id
   - user_is_new
+  # emotion
   - sentiment
 
 forms:
@@ -42,12 +48,14 @@ forms:
 
   new_goal_form:
     goal:
-      - type: from_text
+      - type: from_entity
+        entity: goal
     goal_type:
-      - type: from_text
+      - type: from_entity
+        entity: goal_type
     goal_end:
       - type: from_entity
-        entity: time
+        entity: word_time
 
   record_mood_form:
     mood_reason:
@@ -155,9 +163,9 @@ responses:
     - text: "I'm not human. I am made from zeros and ones"
 
   # ANCHOR: New mission form
-  utter_ask_new_mission_form_mission:
-    - custom:
-        component: "mission_form"
+  # utter_ask_new_mission_form_mission:
+  #   - custom:
+  #       component: "mission_form"
 
   # utter_ask_new_mission_form_mission:
   #   - text: "So, {user_name}, what is your mission? Be as specific as possible:"
@@ -167,9 +175,10 @@ responses:
 
   # ANCHOR: New goal form
   # utter_ask_new_goal_form_goal:
-  #   - text: "Now, what’s one thing you can do that will help you reach your mission?"
-  utter_ask_new_goal_form_goal_type:
-    - text: "Every day, or just one time?"
+  #   - custom:
+  #       component: "goal_form"
+  # utter_ask_new_goal_form_goal_type:
+  #   - text: "Every day, or just one time?"
 
   # utter_ask_new_goal_form_goal_end:
   #   - text: "When will you do that?"
@@ -187,6 +196,7 @@ actions:
   - action_new_user_mission
   - action_new_user_goal
   # mission
+  - action_ask_new_mission_form_mission
   - action_save_mission
   # mood
   - action_ask_record_mood_form_mood_reason
@@ -196,14 +206,13 @@ actions:
   - action_grab_quote
   # goal
   - action_ask_new_goal_form_goal
-  - action_ask_new_goal_form_goal_end
   - action_save_goal
   # time
   - action_get_time_from_text
   - action_get_time_from_words
   - action_reset_time
   # form validation
-  - validate_new_goal_form
+  # - validate_new_goal_form
   - validate_record_mood_form
 
 session_config:
