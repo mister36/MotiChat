@@ -16,10 +16,18 @@ intents:
   - feeling
   - improve_mood
   - new_goal
+  - user.tired
+  - user.angry
+  - agent.what_can_do
+  - user.sad
+  - user.lonely
+  - user.bored
+  - agent.bad
+  - user.busy
 
 entities:
   # mission & goals
-  - mission
+  # - mission
   - goal
   - goal_type
   # numbers
@@ -38,13 +46,13 @@ entities:
 forms:
   # NOTE: Each form slot should have "influence_conversation: false"
   # and "auto_fill: false"
-  new_mission_form:
-    mission:
-      - type: from_entity
-        entity: mission
-    mission_end:
-      - type: from_entity
-        entity: word_time
+  # new_mission_form:
+  #   mission:
+  #     - type: from_entity
+  #       entity: mission
+  #   mission_end:
+  #     - type: from_entity
+  #       entity: word_time
 
   new_goal_form:
     goal:
@@ -61,17 +69,22 @@ forms:
     mood_reason:
       - type: from_text
 
+  # form made so I can implement what the users would like to see
+  improve_mood_form:
+    help:
+      - type: from_text
+
 slots:
   # SECTION: Mission & goals
-  mission:
-    type: text
-    influence_conversation: false
-    auto_fill: false
+  # mission:
+  #   type: text
+  #   influence_conversation: false
+  #   auto_fill: false
 
-  mission_end:
-    type: text
-    influence_conversation: false
-    auto_fill: false
+  # mission_end:
+  #   type: text
+  #   influence_conversation: false
+  #   auto_fill: false
 
   goal:
     type: text
@@ -134,6 +147,11 @@ slots:
     type: text
     influence_conversation: true
 
+  # SECTION: Help
+  help:
+    type: text
+    influence_conversation: false
+
   # used when setting time slot directly from words
   # e.g, /info{"word_time": "January 25"}
   word_time:
@@ -159,49 +177,30 @@ responses:
 
   utter_iam_bot:
     - text: "I am your motivational assistant, Moti"
-    - text: "I was developed using artificial intelligence to motivate the human race"
-    - text: "I'm not human. I am made from zeros and ones"
-
-  # ANCHOR: New mission form
-  # utter_ask_new_mission_form_mission:
-  #   - custom:
-  #       component: "mission_form"
-
-  # utter_ask_new_mission_form_mission:
-  #   - text: "So, {user_name}, what is your mission? Be as specific as possible:"
-
-  # utter_ask_new_mission_form_mission_end:
-  #   - text: "Great! When do you want to accomplish this?"
-
-  # ANCHOR: New goal form
-  # utter_ask_new_goal_form_goal:
-  #   - custom:
-  #       component: "goal_form"
-  # utter_ask_new_goal_form_goal_type:
-  #   - text: "Every day, or just one time?"
-
-  # utter_ask_new_goal_form_goal_end:
-  #   - text: "When will you do that?"
-  #   - text: "When will you complete it?"
+    - text: "I was made using artificial intelligence. I'm still young, and am getting used to talking to people"
+    - text: "I'm just a bunch of ones and zeros :)"
 
   # ANCHOR: Mood
-  utter_dig_in:
-    - text: "Dig in😋"
+  utter_ask_improve_mood_form_help:
+    - text: "What can I do to help in the future? I'm still learning, so I could use your advice"
+    - text: "How can I help you if you feel bad like this again?"
+    - text: "Help me help you. What would you like me to do in the future to help you feel better?"
 
-  utter_check_moti_moods:
-    - text: "Take a look at your MotiMoods and see what trends come up"
+  utter_thanks_for_help:
+    - text: "Thanks for the help"
+    - text: "I appreciate the feedback🤙"
 
 actions:
   # new user
-  - action_new_user_mission
+  # - action_new_user_mission
   - action_new_user_goal
   # mission
-  - action_ask_new_mission_form_mission
-  - action_save_mission
+  # - action_ask_new_mission_form_mission
+  # - action_save_mission
   # mood
   - action_ask_record_mood_form_mood_reason
   - action_save_mood
-  - action_improve_mood
+  # - action_improve_mood
   # quote
   - action_grab_quote
   # goal

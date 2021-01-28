@@ -15,61 +15,14 @@ rules:
           - user_is_new: false
       - action: action_listen
 
-  #   - rule: Whenever 'user_is_new' slot is true, run new user flow
-  #     condition:
-  #       - slot_was_set:
-  #           - user_is_new: true
-  #     steps:
-  #       - action: action_new_user_mission
-  #       - action: new_mission_form
-  #       - active_loop: new_mission_form
-  #       #   will set the time slot
-  #       - slot_was_set:
-  #           - time: "any"
-
   - rule:
       Whenever 'EXTERNAL_new_user' intent, create mission
       # TODO: Add "conversaton_start" after testing is done
       # conversation_start: true
     steps:
       - intent: EXTERNAL_new_user
-      - action: action_new_user_mission
-      #   New mission form
-      - action: new_mission_form
-      - active_loop: new_mission_form
-      #   will set the time slot
-      - slot_was_set:
-          - word_time: "any"
-
-  - rule: submit "new_mission_form", start "new_goal_form"
-    condition:
-      - active_loop: new_mission_form
-    steps:
-      #   will set the time slot
-      - slot_was_set:
-          - word_time: "any"
-      - action: new_mission_form
-      - active_loop: null
-      - action: action_get_time_from_words
-      - slot_was_set:
-          - actual_time: "anything"
-      # save mission
-      - action: action_save_mission
-      #  resets time
-      - action: action_reset_time
-      - slot_was_set:
-          - time: null
-      - slot_was_set:
-          - word_time: null
-      - slot_was_set:
-          - actual_time: null
-      - slot_was_set:
-          - mission_end: null
-      - slot_was_set:
-          - goal_end: null
-        #################
       - action: action_new_user_goal
-      #   start goal form
+      #   New mission form
       - action: new_goal_form
       - active_loop: new_goal_form
       #   will set the time slot
@@ -99,6 +52,53 @@ rules:
       - slot_was_set:
           - actual_time: null
       - slot_was_set:
-          - mission_end: null
-      - slot_was_set:
           - goal_end: null
+#   - rule:
+#       Whenever 'EXTERNAL_new_user' intent, create mission
+#       # TODO: Add "conversaton_start" after testing is done
+#       # conversation_start: true
+#     steps:
+#       - intent: EXTERNAL_new_user
+#       - action: action_new_user_mission
+#       #   New mission form
+#       - action: new_mission_form
+#       - active_loop: new_mission_form
+#       #   will set the time slot
+#       - slot_was_set:
+#           - word_time: "any"
+
+#   - rule: submit "new_mission_form", start "new_goal_form"
+#     condition:
+#       - active_loop: new_mission_form
+#     steps:
+#       #   will set the time slot
+#       - slot_was_set:
+#           - word_time: "any"
+#       - action: new_mission_form
+#       - active_loop: null
+#       - action: action_get_time_from_words
+#       - slot_was_set:
+#           - actual_time: "anything"
+#       # save mission
+#       - action: action_save_mission
+#       #  resets time
+#       - action: action_reset_time
+#       - slot_was_set:
+#           - time: null
+#       - slot_was_set:
+#           - word_time: null
+#       - slot_was_set:
+#           - actual_time: null
+#       - slot_was_set:
+#           - mission_end: null
+#       - slot_was_set:
+#           - goal_end: null
+#         #################
+#       - action: action_new_user_goal
+#       #   start goal form
+#       - action: new_goal_form
+#       - active_loop: new_goal_form
+#       #   will set the time slot
+#       - slot_was_set:
+#           - word_time: "any"
+

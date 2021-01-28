@@ -61,8 +61,8 @@ class WebSocketClient():
                     )
                     await self.on_new_message(user_message)
             except websockets.exceptions.ConnectionClosed:
-                print('Websocket closed. Opening again...')
-                await self.connect()
+                pass
+                # await self.connect()
                 # break
 
     async def heartbeat(self):
@@ -185,11 +185,6 @@ class WebSocketInput(InputChannel):
 
         @ws_server_webhook.listener('after_server_start')
         async def setup_db(app, loop):
-            # Connects to MongoDB where session ids are stores
-            # app.db = AsyncIOMotorClient(
-            #     "mongodb+srv://motiapp:TXG2VoXeoa9kbSAo@moti1.piqgh.mongodb.net/motiSessionDB?retryWrites=true&w=majority")
-            # app.sessionIDs = app.db['motiSessionDB']['sessionIDs']
-
             app.ws = WebSocketClient(on_new_message)
             # Start connection and get client connection protocol
             await asyncio.gather(app.ws.connect())
@@ -211,45 +206,5 @@ class WebSocketInput(InputChannel):
         @ws_server_webhook.websocket('/websocket')
         async def handle_message(request, ws):
             print('hi')
-            # while True:
-            #     # sends connect event
-            #     connect_json = json.dumps({"event": "connection"})
-            #     await ws.send(connect_json)
-            #     # data from client
-            #     data = json.loads((await ws.recv()))
-            #     logger.debug(f"DATA: {data}")
-
-            #     event = data['event']
-            #     id = data['data']['client_id']
-            #     # session_request event handler
-            #     if event == "session_request":
-            #         # figure out whether id is in database, if not add it
-            #         db_id = await request.app.sessionIDs.find_one({"session": id})
-            #         if not db_id:
-            #             await request.app.sessionIDs.insert_one({"session": id})
-
-            #         # adds websocket connection to dictionary
-            #         clients[id] = ws
-            #         logger.debug(f"clients dict: {clients}")
-
-            #         # responds that the session is accepted
-            #         await ws.send(json.dumps({"event": "session_accepted"}))
-
-            #     elif event == "user_message":
-            #         message = data['data']['message']
-            #         # creates and sends message for rasa to handle
-            #         # output = CollectingOutputChannel()
-            #         output = WebSocketOutput('hello@gmail.com', id)
-
-            #         user_message = UserMessage(
-            #             message, output, id, input_channel=self.name()
-            #         )
-            #         await on_new_message(user_message)
-
-    # TODO: Check whether messages contain text or images
-    # await self.ws.send(json.dumps({"event": "bot_message", "data": {"text": "Fuck yeah"}}))
-
-    # await ws.send(json.dumps(
-    #     {"event": "bot_message", "data": {"text": output.messages[-1]['text']}}))
 
         return ws_server_webhook

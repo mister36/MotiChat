@@ -20,12 +20,12 @@ stories:
   - story: user asks how to improve mood
     steps:
       - intent: improve_mood
-      - action: action_improve_mood
+      - action: improve_mood_form
+      - active_loop: improve_mood_form
+      - active_loop: null
       - slot_was_set:
-          # TODO: May have to make custom slot type so value can be read
-          - improve_mood_with: "fruit"
-      - intent: affirm
-      - action: utter_dig_in
+          - requested_slot: null
+      - action: utter_thanks_for_help
 
   - story: mood happy 1
     steps:
@@ -45,75 +45,3 @@ stories:
     steps:
       - intent: motivational_quote
       - action: action_grab_quote
-
-  # - story: user is unhappy
-  #   steps:
-  #     - intent: mood_unhappy
-  #     - action: utter_unhappy_record_motivation
-  #     - action: record_motivation_form
-  #     - active_loop: record_motivation_form
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: utter_check_moti_moods
-
-  # - story: user is happy
-  #   steps:
-  #     - intent: mood_great
-  #     - action: utter_happy_record_motivation
-  #     - action: record_motivation_form
-  #     - active_loop: record_motivation_form
-  #     - active_loop: null
-  #     - slot_was_set:
-  #         - requested_slot: null
-  #     - action: utter_check_moti_moods
-
-  # - story: asking for motivational quote happy 1
-  #   steps:
-  #     - intent: motivational_quote
-  #       entities:
-  #         - sentiment: -0.6
-  #     - slot_was_set:
-  #         - sentiment: -0.6
-  #     - action: utter_test1
-  #     - action: action_grab_quote
-
-  # - story: asking for motivational quote happy 2
-  #   steps:
-  #     - intent: motivational_quote
-  #       entities:
-  #         - sentiment: -0.3
-  #     - slot_was_set:
-  #         - sentiment: -0.3
-  #     - action: utter_test2
-  #     - action: action_grab_quote
-
-  # - story: asking for motivational quote happy 3
-  #   steps:
-  #     - intent: motivational_quote
-  #       entities:
-  #         - sentiment: 0.0
-  #     - slot_was_set:
-  #         - sentiment: 0.0
-  #     - action: utter_test3
-  #     - action: action_grab_quote
-
-  # - story: asking for motivational quote happy 4
-  #   steps:
-  #     - intent: motivational_quote
-  #       entities:
-  #         - sentiment: 0.3
-  #     - slot_was_set:
-  #         - sentiment: 0.3
-  #     - action: utter_test4
-  #     - action: action_grab_quote
-
-  # - story: asking for motivational quote happy 5
-  #   steps:
-  #     - intent: motivational_quote
-  #       entities:
-  #         - sentiment: 0.6
-  #     - slot_was_set:
-  #         - sentiment: 0.6
-  #     - action: utter_test5
-  #     - action: action_grab_quote

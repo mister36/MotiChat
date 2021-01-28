@@ -43,6 +43,8 @@ nlu:
       - any way i can start to feel better moti?
       - i want to improve my mood 
       - feel happier
+      - i want to feel better
+      - cheer me up
 
   - intent: new_goal
     examples: |
@@ -53,12 +55,204 @@ nlu:
       - i want to develop a habit 
       - new habit please 
       - hey moti, make a new habit for me please 
-      - feel like adding a goal to my mission
+      - feel like adding a goal
       - add a habit 
-      - i need another goal for my mission 
+      - i need another goal 
       - create a new goal
       - need a goal for my mission
       - add to my routine
+
+  - intent: user.tired
+    examples: |
+      - I'm drained
+      - I've overworked
+      - I am tired
+      - I'm exhausted
+      - I grow weary
+      - I'm worn out
+      - I'm getting tired
+      - I feel tired
+      - I'm so tired
+      - I'm completely drained out
+      - I'm very tired
+      - i was tired
+      - i feel tired
+      - i'm dead tired
+      - I'm a bit tires
+      - I was very tired
+      - I am really tired
+      - i am awfully tired
+      - i am kind of so tired
+      - I am little tired
+
+  - intent: user.angry
+    examples: |
+      - I'm being mad
+      - I'm enraged
+      - I'm angry
+      - I'm furious
+      - I am angry with you
+      - I am mad
+      - I am mad at you
+      - i'm pissed off
+      - you have pissed me off
+      - I'm mad at you
+      - I am pissed
+      - I'm furious with you
+      - I got angry
+      - I was angry
+      - I became angry
+      - I was very angry
+      - You bet I'm angry
+      - That made me angry
+      - U made me angry
+      - I'm still angry about that
+
+  - intent: agent.what_can_do
+    examples: |
+      - what can you do?
+      - what can do?
+      - what is your ability?
+      - what are your abilities?
+      - what is the thing that you can do for me?
+      - what you can provide for me?
+      - what can u do?
+      - what all you do?
+      - what all u do?
+      - what you do?
+      - what can you do for me?
+      - what all can you do?
+      - what are your features?
+
+  - intent: user.sad
+    examples: |
+      - I'm in a sad mood
+      - I am sad
+      - I'm grieving
+      - I am depressed
+      - I am feeling sad
+      - I am upset
+      - I'm unhappy
+      - I'm having a bad day
+      - I want to cry
+      - I'm not happy
+      - feeling sad
+      - I felt sad for no reason
+      - Now I'm sad
+      - It makes me sad
+      - I am sad to hear it
+      - I am a very sad person
+      - I feel sad every now and then
+      - I am as sad and lonely as can be
+      - feeling so down
+      - i am not in a good mood
+
+  - intent: user.lonely
+    examples: |
+      - I am lonely
+      - I'm very lonely
+      - I'm so lonely
+      - I'm really lonely
+      - I am feeling lonely
+      - I feel lonely
+      - I am a loner
+      - I don't have any company
+      - I don't have anyone else
+      - I'm always alone
+      - I'm alone
+      - am all alone
+      - I live alone
+      - I'm all alone
+      - I've gotten used to living alone
+      - I think I've been living alone too long
+      - One of the disadvantages of living alone is that you have no one to talk to
+      - I am still alone
+      - i lives in this city all alone
+      - I am used to living alone
+
+  - intent: user.bored
+    examples: |
+      - soo bored
+      - that was boring
+      - I'm bored
+      - bored
+      - boring
+      - I am getting bored
+      - Staying at home is boring
+      - very boring
+      - it bores me
+      - i had a slow day
+      - i am very bored
+      - Im kinda bored today
+      - I've never been more bored
+      - I was bored
+      - It's boring
+      - This is boring
+      - We're all bored
+      - It's very boring
+      - I'm already bored
+      - I'm bored out of my mind
+
+  - intent: agent.bad
+    examples: |
+      - you're not helping me
+      - you are bad
+      - you're very bad
+      - you're really bad
+      - you are useless
+      - you are horrible
+      - you are a waste of time
+      - you are disgusting
+      - you are lame
+      - you are no good
+      - you're bad
+      - you're awful
+      - you are not cool
+      - you are not good
+      - you are so bad
+      - you are so useless
+      - you are terrible
+      - you are totally useless
+      - you are very bad
+      - you are waste
+      - you're a bad
+      - you're not a good
+      - you're not very good
+      - you're terrible
+      - you're the worst
+      - you're the worst ever
+      - you're worthless
+      - you suck
+      - you suck
+      - You are seriously mindless and stupid
+      - why are you so lame
+      - your are a loser
+      - you are really the worst bot ever
+      - Why are you this lame?
+
+  - intent: user.busy
+    examples: |
+      - busy right now
+      - I'm overloaded
+      - I have no time
+      - I'm busy
+      - I'm swamped
+      - I got things to do
+      - how busy I am
+      - I got work to do
+      - I'm working
+      - I don't have time for this
+      - I'm super busy
+      - I'm working right now
+      - I'm busy right now and can't play with you
+      - I have rather a busy afternoon in front of me
+      - i am too busy
+      - I am very busy
+      - I'm a bit busy
+      - I'm a busy man
+      - quite busy
+      - I'm kind of busy
+      - I'll see you later
 
   # - intent: future
   #   examples: |
