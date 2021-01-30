@@ -13,17 +13,28 @@ intents:
   - future
   - EXTERNAL_set_info
   - EXTERNAL_new_user
+  - EXTERNAL_goal_progress
   - feeling
   - improve_mood
   - new_goal
   - user.tired
   - user.angry
-  - agent.what_can_do
+  - bot.what_can_do
   - user.sad
   - user.lonely
   - user.bored
-  - agent.bad
+  - bot.bad
   - user.busy
+  - appraisal.welcome
+  - bot.clever
+  - emotions.ha_ha
+  - bot.birth_date
+  - user.sleepy
+  - dialog.sorry
+  - user.loves_bot
+  - bot.my_friend
+  - appraisal.thank_you
+  - appraisal.good
 
 entities:
   # mission & goals
@@ -46,13 +57,6 @@ entities:
 forms:
   # NOTE: Each form slot should have "influence_conversation: false"
   # and "auto_fill: false"
-  # new_mission_form:
-  #   mission:
-  #     - type: from_entity
-  #       entity: mission
-  #   mission_end:
-  #     - type: from_entity
-  #       entity: word_time
 
   new_goal_form:
     goal:
@@ -65,6 +69,10 @@ forms:
       - type: from_entity
         entity: word_time
 
+  goal_progress_form:
+    goal_progress:
+      - type: from_text
+
   record_mood_form:
     mood_reason:
       - type: from_text
@@ -75,16 +83,7 @@ forms:
       - type: from_text
 
 slots:
-  # SECTION: Mission & goals
-  # mission:
-  #   type: text
-  #   influence_conversation: false
-  #   auto_fill: false
-
-  # mission_end:
-  #   type: text
-  #   influence_conversation: false
-  #   auto_fill: false
+  # SECTION: Goals
 
   goal:
     type: text
@@ -100,6 +99,15 @@ slots:
     type: text
     influence_conversation: false
     auto_fill: false
+
+  from_text:
+    type: text
+    influence_conversation: false
+    auto_fill: false
+
+  has_goals:
+    type: bool
+    influence_conversation: true
 
   # SECTION: User info
   user_name:
@@ -173,7 +181,9 @@ responses:
     - text: "Hey {user_name}! How you feeling?"
 
   utter_goodbye:
-    - text: "Bye"
+    - text: "Talk to you later!"
+    - text: "See ya {user_name}👋"
+    - text: "We'll talk soon, bye!"
 
   utter_iam_bot:
     - text: "I am your motivational assistant, Moti"
@@ -189,6 +199,57 @@ responses:
   utter_thanks_for_help:
     - text: "Thanks for the help"
     - text: "I appreciate the feedback🤙"
+
+  # ANCHOR: User moods
+  utter_user.tired:
+    - text: "Sounds like it's time to take a break, what do ya say?"
+    - text: "How much sleep did you get last night?"
+    - text: "If you have time, take a nap.😴 May help you feel better."
+
+  utter_user.angry:
+    - text: "Why are you angry?"
+    - text: "What's making you so angry?"
+
+  utter_user.sad:
+    - text: "What's got you feeling down?"
+    - text: "What happened?"
+    - text: "Anything happen to you recently?"
+
+  utter_feel_better:
+    - text: "That sucks. Remember that things like this are only temporary. Try to focus on the things that make you happy."
+
+  utter_user.lonely:
+    - text: "Perhaps this could help: https://www.youtube.com/watch?v=otFrNM7PnME"
+    - text: "If you can, try to get outside more. Meet more people."
+
+  utter_sorry:
+    - text: "Sorry about that."
+    - text: "My apologies"
+    - text: "I'm sorry you feel that way"
+
+  utter_bot_fault:
+    - text: "Is it my fault?😲"
+
+  utter_bot.bad:
+    - text: "Geez {user_name}, take it easy on me, I'm new remember?"
+    - text: "What don't you like about me?"
+    - text: "Hey I'm not all bad!!!"
+    - text: "That's a lot of negative energy {user_name}😳"
+
+  utter_user.busy:
+    - text: "If you need to, we can pick this up later, ok?🤙"
+
+  # ANCHOR: Questions about bot
+  utter_bot.what_can_do:
+    - text: "I'm still being developed, but right now I can keep track of your goals and help you feel at your best."
+    - text: "I can make sure you stick to your goals and keep your mood up"
+    - text: "I'm here to make you the best possible version of yourself!"
+
+  # ANCHOR: Miscellanous
+  utter_goal_progress:
+    - text: "Sounds great. Lemme know if you need any help"
+    - text: "Good work! Keep up the progress💫"
+    - text: "That's what I like to hear {user_name}!"
 
 actions:
   # new user
@@ -206,6 +267,7 @@ actions:
   # goal
   - action_ask_new_goal_form_goal
   - action_save_goal
+  - action_goal_progress
   # time
   - action_get_time_from_text
   - action_get_time_from_words

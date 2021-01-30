@@ -27,19 +27,84 @@ stories:
           - requested_slot: null
       - action: utter_thanks_for_help
 
-  - story: mood happy 1
+  - story: External; bot will ask goal progress (user has goals)
     steps:
-      - intent: feeling
+      - intent: EXTERNAL_goal_progress
+      - action: action_goal_progress
+      - intent: appraisal.good
+      - action: utter_goal_progress
+
+  - story: External; bot will ask goal progress (user has no goals)
+    steps:
+      - intent: EXTERNAL_goal_progress
+      - action: action_goal_progress
       - slot_was_set:
-          - sentiment: 0.7
-      - action: record_mood_form
-      - active_loop: record_mood_form
-      - slot_was_set:
-          - sentiment_for_form: 0.7
-      - active_loop: null
-      - slot_was_set:
-          - requested_slot: null
-      - action: action_save_mood
+          - has_goals: false
+      - intent: affirm
+      - action: new_goal_form
+      - active_loop: new_goal_form
+
+  - story: user is tired happy 1
+    steps:
+      - intent: user.tired
+      - action: utter_user.tired
+      - intent: affirm
+      - action: utter_goodbye
+
+  - story: user is angry
+    steps:
+      - intent: user.angry
+      - action: utter_user.angry
+      - intent: inform
+      - action: utter_sorry
+
+  - story: user asks what bot can do
+    steps:
+      - intent: bot.what_can_do
+      - action: utter_bot.what_can_do
+
+  - story: user is sad
+    steps:
+      - intent: user.sad
+      - action: utter_user.sad
+      - intent: inform
+      - action: utter_feel_better
+
+  - story: user is lonely
+    steps:
+      - intent: user.lonely
+      - action: utter_user.lonely
+
+  - story: user is bored
+    steps:
+      - intent: user.bored
+      - action: utter_bot_fault
+
+  - story: user call bot bad
+    steps:
+      - intent: bot.bad
+      - action: utter_bot.bad
+
+  - story: user is busy
+    steps:
+      - intent: user.busy
+      - action: utter_user.busy
+      - intent: inform
+      - action: utter_goodbye
+
+  # - story: mood happy 1
+  #   steps:
+  #     - intent: feeling
+  #     - slot_was_set:
+  #         - sentiment: 0.7
+  #     - action: record_mood_form
+  #     - active_loop: record_mood_form
+  #     - slot_was_set:
+  #         - sentiment_for_form: 0.7
+  #     - active_loop: null
+  #     - slot_was_set:
+  #         - requested_slot: null
+  #     - action: action_save_mood
 
   - story: asking for motivational quote
     steps:

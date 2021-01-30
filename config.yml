@@ -1,6 +1,6 @@
 # Configuration for Rasa NLU.
 # https://rasa.com/docs/rasa/nlu/components/
-# Running: rasa run --connector socketio --cors "*"
+# Running: rasa run --connector channels.websocket_channel.WebSocketInput --cors "*"
 # source ./venv/bin/activate
 language: en
 
