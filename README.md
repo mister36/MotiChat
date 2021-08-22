@@ -11,7 +11,7 @@
 
 ## About The Project
 
-Take a look at my wellness app's [readme](https://github.com/mister36/wellness-app) to understand the context of this project.
+Take a look at my wellness app's [readme](https://github.com/mister36/wellness-app/blob/master/README.md) to understand the context of this project.
 
 This is where all of the magic happens. The actual wellness assistant is built off of [Rasa's](https://github.com/RasaHQ/rasa) machine learning framework. Using Rasa, Moti has the ability to save user information into it's "memory" and start complex conversations that improves mental wellbeing. Moti connects with the [Node.JS server](https://github.com/mister36/wellness-api) through a custom WebSocket connection, enabling lightning-fast communication.
 
